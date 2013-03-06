@@ -18,8 +18,9 @@ GET /players
     "items": [
         { 
             "id": 1,
+            "ref": "nx-345",
             "url": "/players/1",
-            "name": "Foo Bar"
+            "name": "Foo Bar",
             "score": 200
         }
 ] }
@@ -27,10 +28,49 @@ GET /players
 Create a new player
 POST /players
 > Content-Type: application/json
-{ "product":"1AB23ORM", "quantity": 2 }
+{ 
+    "ref": "nx-345",
+    "name": "Foo Bar"
+}
 < 201
 < Content-Type: application/json
-{ "status": "created", "url": "/shopping-cart/2" }
+{ 
+    "status": "created", 
+    "url": "/players/1"
+}
+
+Gets information about a given player
+GET /players/:player
+< 200
+< Content-Type: application/json
+{
+    "id": 1,
+    "ref": "nx-345",
+    "url": "/players/1",
+    "name": "Foo Bar",
+    "score": 200
+}
+
+Updates a player
+PUT /players/:player
+> Content-Type: application/json
+{
+    "name":"Foo Bar",
+    "ref":"nx-456"
+}
+< 200
+< Content-Type: application/json
+{
+    "status":"updated"
+}
+
+Removes a player
+DELETE /players/:player
+< 200
+< Content-Type: application/json
+{
+    "status": "deleted"
+}
 
 
 
