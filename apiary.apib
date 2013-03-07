@@ -89,6 +89,10 @@ GET /players/:player/badges
     ]
 }
 
+--
+Player's Events
+--
+
 Gets the list of events a player performed
 GET /players/:player/events
 < 200
@@ -101,4 +105,82 @@ GET /players/:player/events
             // ...            
         }
     ]
+}
+
+
+A player sends an event to the system queue
+POST /players/:player/events
+> Content-Type: application/json
+{
+    "eventType":"Foo Event"
+}
+< 202
+< Content-Type: application/json
+{
+    "status": "queued"
+}
+
+--
+Events administration
+--
+
+List current event types
+GET /events
+< 200
+< Content-Type: application/json
+{
+    {
+        "items":[
+            {
+                "id":1,
+                "name":"Foo Event",
+                "url":"/events/1"
+            }
+            //...
+        ]
+    }
+}
+
+Get information about an event type
+GET /events/:event
+< 200
+< Content-Type: application/json
+{
+    "id":1,
+    "name":"Foo Event",
+    "url":"/events/1"
+    //...
+}
+
+Create an event type
+POST /events
+> Content-Type: application/json
+{
+    "name": "Foo Event"
+    //...
+}
+< 201
+{
+    "status": "created",
+    "url": "/events/1"
+}
+
+Edit an event type
+PUT /events/:event
+> Content-Type: application/json
+{
+    "name": "Bar Event"
+    //..
+}
+< 200
+{
+    "status": "updated"
+}
+
+Delete an event type
+DELETE /events/:event
+> Content-Type: application/json
+< 200
+{
+    "status": "deleted"
 }
