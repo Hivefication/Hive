@@ -63,7 +63,7 @@ PUT /players/:player
 < 200
 < Content-Type: application/json
 {
-    "status":"updated"
+    "status":"updated",
 }
 
 Removes a player
@@ -216,4 +216,67 @@ GET /leaderboards/bybadge
             "score": 200
         }
     ]
+}
+
+--
+Badges administration
+--
+
+List current event types
+GET /badges
+< 200
+< Content-Type: application/json
+{
+    "items": [
+        {
+            "id": 1,
+            "icon": "http://path.to.picture",
+            "name": "Foo Badge",
+            "url": "/badges/1"
+        }    
+    ]
+}
+
+Detail of a badge
+GET /badges/:badge
+< 200
+< Content-Type: application/json
+{
+    "id": 1,
+    "icon": "http://path.to.picture",
+    "name": "Foo Badge",
+    "url": "/badges/1"
+}
+
+Create an event type
+POST /badges
+> Content-Type: application/json
+{
+    "name": "Foo Badge"
+    "icon": "http://path.to.picture",
+}
+< 201
+{
+    "status": "created",
+    "url": "/badges/1"
+}
+
+Edit an event type
+PUT /badges/:badge
+> Content-Type: application/json
+{
+    "name": "Bar Badge"
+    //..
+}
+< 200
+{
+    "status": "updated"
+}
+
+Delete an event type
+DELETE /badges/:badge
+> Content-Type: application/json
+< 200
+{
+    "status": "deleted"
 }
