@@ -187,13 +187,33 @@ DELETE /events/:event
  Leader boards
 --
 Basic leaderboards
-GET /leaderboards/
+GET /leaderboards/byscore
 > Content-Type: application/json
 < 200
 {
     "players": [
         {
-            ""
+            "id": 1,
+            "ref": "nx-345",
+            "name": "Foo Bar",
+            "url": "/players/1",
+            "score": 200
         }    
+    ]
+}
+
+By badge
+GET /leaderboards/bybadge
+> Content-Type: application/json
+< 200
+{
+    "players": [
+        {
+            "id": 1,
+            "ref": "nx-345",
+            "name": "Foo Bar",
+            "url": "/players/1",
+            "score": 200
+        }
     ]
 }
