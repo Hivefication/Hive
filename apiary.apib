@@ -280,3 +280,131 @@ DELETE /badges/:badge
 {
     "status": "deleted"
 }
+
+
+--
+Rewards administration
+--
+
+List current event types
+GET /rewards
+< 200
+< Content-Type: application/json
+{
+    "items": [
+        {
+            "id": 1,
+            "name": "Foo Rewards",
+            "url": "/rewards/1",
+            "score": 200,
+            "badges": [
+                {
+                    "id": 1,
+                    "icon": "http://path.to.picture",
+                    "name": "Foo Badge",
+                    "url": "/badges/1"
+                },
+                // ...
+            ],
+            "rules":[
+                // ...    
+            ]
+        }    
+    ]
+}
+
+Detail of a badge
+GET /rewards/:reward
+< 200
+< Content-Type: application/json
+{
+    "id": 1,
+    "name": "Foo Rewards",
+    "url": "/rewards/1",
+    "score": 200,
+    "badges": [
+        {
+            "id": 1,
+            "icon": "http://path.to.picture",
+            "name": "Foo Badge",
+            "url": "/badges/1"
+        },
+        // ...
+    ],
+    "rules": [
+        //...    
+    ]
+}
+
+Create an event type
+POST /rewards
+> Content-Type: application/json
+{
+    "id": 1,
+    "name": "Foo Rewards",
+    "url": "/rewards/1",
+    "score": 200,
+}
+< 201
+{
+    "status": "created",
+    "url": "/rewards/1"
+}
+
+Edit an event type
+PUT /rewards/:reward
+> Content-Type: application/json
+{
+    "name": "Foo Rewards",
+    "score": 200,
+}
+< 200
+{
+    "status": "updated"
+}
+
+Add rules to a reward
+POST /rewards/:reward/rules
+> Content-Type: application/json
+{
+    "rule": 1
+}
+< 201
+{
+    "status": "linked"
+}
+
+Remove rules from a reward
+DELETE /rewards/:reward/rules/:rule
+> Content-Type: application/json
+< 200
+{
+    "status": "deleted"
+}
+
+Add badges to a reward
+POST /rewards/:reward/badges
+> Content-Type: application/json
+{
+    "badge": 1
+}
+< 201
+{
+    "status": "linked"
+}
+
+Remove badges from a reward
+DELETE /rewards/:reward/badges/:badge
+> Content-Type: application/json
+< 200
+{
+    "status": "deleted"
+}
+
+Delete an event type
+DELETE /rewards/:reward
+> Content-Type: application/json
+< 200
+{
+    "status": "deleted"
+}
