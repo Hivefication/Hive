@@ -37,7 +37,8 @@ POST /players
 < Content-Type: application/json
 { 
     "status": "created", 
-    "url": "/players/1"
+    "url": "/players/1",
+    "id": "1"
 }
 
 Gets information about a given player
@@ -102,7 +103,7 @@ GET /players/:player/events
         {
             "id": 123,
             "date": 1363186482
-            // ...            
+            "name": "Foo Event"          
         }
     ]
 }
@@ -135,7 +136,6 @@ GET /events
             "name":"Foo Event",
             "url":"/events/1"
         }
-        //...
     ]
 }
 
@@ -147,7 +147,6 @@ GET /events/:event
     "id":1,
     "name":"Foo Event",
     "url":"/events/1"
-    //...
 }
 
 Create an event type
@@ -155,12 +154,12 @@ POST /events
 > Content-Type: application/json
 {
     "name": "Foo Event"
-    //...
 }
 < 201
 {
     "status": "created",
-    "url": "/events/1"
+    "url": "/events/1",
+    "id": "1"
 }
 
 Edit an event type
@@ -168,7 +167,6 @@ PUT /events/:event
 > Content-Type: application/json
 {
     "name": "Bar Event"
-    //..
 }
 < 200
 {
@@ -248,7 +246,7 @@ GET /badges/:badge
     "url": "/badges/1"
 }
 
-Create an event type
+Create a badge
 POST /badges
 > Content-Type: application/json
 {
@@ -261,7 +259,7 @@ POST /badges
     "url": "/badges/1"
 }
 
-Edit an event type
+Edit a badge
 PUT /badges/:badge
 > Content-Type: application/json
 {
@@ -481,7 +479,8 @@ POST /rules
 < 201
 {
     "status": "created",
-    "url": "/rules/1"
+    "url": "/rules/1",
+    "id": "1"
 }
 
 Edit a rule
