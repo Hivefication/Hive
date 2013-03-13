@@ -101,7 +101,7 @@ GET /players/:player/events
     "items":[
         {
             "id": 123,
-            "date": "YYYY-MM-DD HH:mm:ss"// or unixtime!
+            "date": 1363186482
             // ...            
         }
     ]
@@ -252,7 +252,7 @@ Create an event type
 POST /badges
 > Content-Type: application/json
 {
-    "name": "Foo Badge"
+    "name": "Foo Badge",
     "icon": "http://path.to.picture",
 }
 < 201
@@ -297,6 +297,9 @@ GET /rewards
             "name": "Foo Rewards",
             "url": "/rewards/1",
             "score": 200,
+            "durationInMinutes": 100,
+            "deadline": 1363186482,
+            "ordered": false,
             "badges": [
                 {
                     "id": 1,
@@ -306,14 +309,18 @@ GET /rewards
                 },
                 // ...
             ],
-            "rules":[
+            "rules": [
+                {
+                    "id": 1,
+                    "url": "/rules/1"
+                }
                 // ...    
             ]
         }    
     ]
 }
 
-Detail of a badge
+Detail of a reward
 GET /rewards/:reward
 < 200
 < Content-Type: application/json
@@ -322,6 +329,9 @@ GET /rewards/:reward
     "name": "Foo Rewards",
     "url": "/rewards/1",
     "score": 200,
+    "durationInMinutes": 100,
+    "deadline": 1363186482,
+    "ordered": false,
     "badges": [
         {
             "id": 1,
@@ -332,18 +342,23 @@ GET /rewards/:reward
         // ...
     ],
     "rules": [
+        {
+            "id": 1,
+            "url": "/rules/1"
+        }
         //...    
     ]
 }
 
-Create an event type
+Create a reward
 POST /rewards
 > Content-Type: application/json
 {
-    "id": 1,
     "name": "Foo Rewards",
-    "url": "/rewards/1",
     "score": 200,
+    "durationInMinutes": 100,
+    "deadline": 1363186482,
+    "ordered": false
 }
 < 201
 {
@@ -351,12 +366,15 @@ POST /rewards
     "url": "/rewards/1"
 }
 
-Edit an event type
+Edit a reward
 PUT /rewards/:reward
 > Content-Type: application/json
 {
     "name": "Foo Rewards",
     "score": 200,
+    "durationInMinutes": 100,
+    "deadline": 1363186482,
+    "ordered": false,
 }
 < 200
 {
@@ -401,8 +419,87 @@ DELETE /rewards/:reward/badges/:badge
     "status": "deleted"
 }
 
-Delete an event type
+Delete a reward
 DELETE /rewards/:reward
+> Content-Type: application/json
+< 200
+{
+    "status": "deleted"
+}
+
+--
+Rules administration
+--
+
+List all rules
+GET /rules
+< 200
+< Content-Type: application/json
+{
+    "items": [
+        {
+            "id": 1,
+            "url": "/rules/1",
+            "event": {
+                "id":1,
+                "name":"Foo Event",
+                "url":"/events/1"
+            },
+            "durationInMinutes": 100,
+            "arg": "Foo Text",
+            "eventCounter": 5
+        }    
+    ]
+}
+
+Detail of a rule
+GET /rules/:rule
+< 200
+< Content-Type: application/json
+{
+    "id": 1,
+    "url": "/rules/1",
+    "event": {
+        "id":1,
+        "name":"Foo Event",
+        "url":"/events/1"
+    },
+    "durationInMinutes": 100,
+    "arg": "Foo Text",
+    "eventCounter": 5
+}
+
+Create a rule
+POST /rules
+> Content-Type: application/json
+{
+    "event": 1,
+    "durationInMinutes": 100,
+    "arg": "Foo Text",
+    "eventCounter": 5
+}
+< 201
+{
+    "status": "created",
+    "url": "/rules/1"
+}
+
+Edit a rule
+PUT /rules/:rule
+> Content-Type: application/json
+{
+    "event": 1,
+    "durationInMinutes": 100,
+    "arg": "Foo Text",
+    "eventCounter": 5
+}
+< 200
+{
+    "status": "updated"
+}
+
+Delete a rule
+DELETE /rules/:rule
 > Content-Type: application/json
 < 200
 {
