@@ -25,7 +25,8 @@ GET /players
             "rewards" : "/players/1/rewards",
             "badges": "/players/1/badges"
         }
-] }
+    ]
+}
 
 Create a new player
 POST /players
@@ -38,7 +39,8 @@ POST /players
 < Content-Type: application/json
 { 
     "status": "created", 
-    "url": "/players/1"
+    "url": "/players/1",
+    "id": "1"
 }
 
 Gets information about a given player
@@ -177,10 +179,9 @@ GET /events
     "items":[
         {
             "id":1,
-            "name":"Foo Event",
-            "url":"/events/1"
+            "url":"/events/1",
+            "name":"Foo Event"
         }
-        //...
     ]
 }
 
@@ -192,7 +193,6 @@ GET /events/:event
     "id":1,
     "name":"Foo Event",
     "url":"/events/1"
-    //...
 }
 
 Create an event type
@@ -200,12 +200,12 @@ POST /events
 > Content-Type: application/json
 {
     "name": "Foo Event"
-    //...
 }
 < 201
 {
     "status": "created",
-    "url": "/events/1"
+    "url": "/events/1",
+    "id": "1"
 }
 
 Edit an event type
@@ -213,7 +213,6 @@ PUT /events/:event
 > Content-Type: application/json
 {
     "name": "Bar Event"
-    //..
 }
 < 200
 {
@@ -240,8 +239,8 @@ GET /leaderboards/byscore
         {
             "id": 1,
             "ref": "nx-345",
-            "name": "Foo Bar",
             "url": "/players/1",
+            "name": "Foo Bar",
             "score": 200
         }    
     ]
@@ -256,8 +255,8 @@ GET /leaderboards/bybadge
         {
             "id": 1,
             "ref": "nx-345",
-            "name": "Foo Bar",
             "url": "/players/1",
+            "name": "Foo Bar",
             "score": 200
         }
     ]
@@ -275,9 +274,9 @@ GET /badges
     "items": [
         {
             "id": 1,
-            "icon": "http://path.to.picture",
+            "url": "/badges/1",
             "name": "Foo Badge",
-            "url": "/badges/1"
+            "icon": "http://path.to.picture"
         }    
     ]
 }
@@ -288,12 +287,12 @@ GET /badges/:badge
 < Content-Type: application/json
 {
     "id": 1,
-    "icon": "http://path.to.picture",
+    "url": "/badges/1",
     "name": "Foo Badge",
-    "url": "/badges/1"
+    "icon": "http://path.to.picture"
 }
 
-Create an event type
+Create a badge
 POST /badges
 > Content-Type: application/json
 {
@@ -306,7 +305,7 @@ POST /badges
     "url": "/badges/1"
 }
 
-Edit an event type
+Edit a badge
 PUT /badges/:badge
 > Content-Type: application/json
 {
@@ -339,8 +338,8 @@ GET /rewards
     "items": [
         {
             "id": 1,
-            "name": "Foo Rewards",
             "url": "/rewards/1",
+            "name": "Foo Rewards",
             "score": 200,
             "durationInMinutes": 100,
             "deadline": 1363186482,
@@ -348,9 +347,9 @@ GET /rewards
             "badges": [
                 {
                     "id": 1,
-                    "icon": "http://path.to.picture",
+                    "url": "/badges/1",
                     "name": "Foo Badge",
-                    "url": "/badges/1"
+                    "icon": "http://path.to.picture"
                 },
                 // ...
             ],
@@ -371,8 +370,8 @@ GET /rewards/:reward
 < Content-Type: application/json
 {
     "id": 1,
-    "name": "Foo Rewards",
     "url": "/rewards/1",
+    "name": "Foo Rewards",
     "score": 200,
     "durationInMinutes": 100,
     "deadline": 1363186482,
@@ -380,9 +379,9 @@ GET /rewards/:reward
     "badges": [
         {
             "id": 1,
+            "url": "/badges/1",
             "icon": "http://path.to.picture",
-            "name": "Foo Badge",
-            "url": "/badges/1"
+            "name": "Foo Badge"
         },
         // ...
     ],
@@ -526,7 +525,8 @@ POST /rules
 < 201
 {
     "status": "created",
-    "url": "/rules/1"
+    "url": "/rules/1",
+    "id": "1"
 }
 
 Edit a rule
