@@ -24,7 +24,8 @@ GET /players
             "score": 200,
             "badges": "/players/1/badges"
         }
-] }
+    ]
+}
 
 Create a new player
 POST /players
@@ -82,9 +83,9 @@ GET /players/:player/badges
     "items": [
         {
             "id": 1,
+            "url": "/badges/1",
             "icon": "http://path.to.picture",
-            "name": "Foo Badge",
-            "url": "/badges/1"
+            "name": "Foo Badge"
         }    
     ]
 }
@@ -132,8 +133,8 @@ GET /events
     "items":[
         {
             "id":1,
-            "name":"Foo Event",
-            "url":"/events/1"
+            "url":"/events/1",
+            "name":"Foo Event"
         }
         //...
     ]
@@ -145,8 +146,8 @@ GET /events/:event
 < Content-Type: application/json
 {
     "id":1,
-    "name":"Foo Event",
-    "url":"/events/1"
+    "url":"/events/1",
+    "name":"Foo Event"
     //...
 }
 
@@ -195,8 +196,8 @@ GET /leaderboards/byscore
         {
             "id": 1,
             "ref": "nx-345",
-            "name": "Foo Bar",
             "url": "/players/1",
+            "name": "Foo Bar",
             "score": 200
         }    
     ]
@@ -211,8 +212,8 @@ GET /leaderboards/bybadge
         {
             "id": 1,
             "ref": "nx-345",
-            "name": "Foo Bar",
             "url": "/players/1",
+            "name": "Foo Bar",
             "score": 200
         }
     ]
@@ -230,9 +231,9 @@ GET /badges
     "items": [
         {
             "id": 1,
-            "icon": "http://path.to.picture",
+            "url": "/badges/1",
             "name": "Foo Badge",
-            "url": "/badges/1"
+            "icon": "http://path.to.picture"
         }    
     ]
 }
@@ -243,9 +244,9 @@ GET /badges/:badge
 < Content-Type: application/json
 {
     "id": 1,
-    "icon": "http://path.to.picture",
+    "url": "/badges/1",
     "name": "Foo Badge",
-    "url": "/badges/1"
+    "icon": "http://path.to.picture"
 }
 
 Create an event type
@@ -294,8 +295,8 @@ GET /rewards
     "items": [
         {
             "id": 1,
-            "name": "Foo Rewards",
             "url": "/rewards/1",
+            "name": "Foo Rewards",
             "score": 200,
             "durationInMinutes": 100,
             "deadline": 1363186482,
@@ -303,9 +304,9 @@ GET /rewards
             "badges": [
                 {
                     "id": 1,
-                    "icon": "http://path.to.picture",
+                    "url": "/badges/1",
                     "name": "Foo Badge",
-                    "url": "/badges/1"
+                    "icon": "http://path.to.picture"
                 },
                 // ...
             ],
@@ -326,8 +327,8 @@ GET /rewards/:reward
 < Content-Type: application/json
 {
     "id": 1,
-    "name": "Foo Rewards",
     "url": "/rewards/1",
+    "name": "Foo Rewards",
     "score": 200,
     "durationInMinutes": 100,
     "deadline": 1363186482,
@@ -335,9 +336,9 @@ GET /rewards/:reward
     "badges": [
         {
             "id": 1,
+            "url": "/badges/1",
             "icon": "http://path.to.picture",
-            "name": "Foo Badge",
-            "url": "/badges/1"
+            "name": "Foo Badge"
         },
         // ...
     ],
