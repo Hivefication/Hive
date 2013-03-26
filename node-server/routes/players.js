@@ -15,6 +15,8 @@ db.open(function(err, db) {
                 console.error("Error opening the 'players' collection.");
             }
         });
+    }else{
+        console.error("Error opening the 'players' collection.");
     }
 });
 
