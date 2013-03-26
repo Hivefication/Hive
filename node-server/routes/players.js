@@ -1,12 +1,12 @@
 var mongo = require('mongodb');
- 
+
 var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
- 
+
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 db = new Db('players', server);
- 
+
 db.open(function(err, db) {
     if(!err) {
         console.log("Connected to 'players' database");
@@ -17,7 +17,7 @@ db.open(function(err, db) {
         });
     }
 });
- 
+
 exports.findById = function(req, res) {
     var id = req.params.id;
     console.log('Retrieving player: ' + id);
@@ -27,7 +27,7 @@ exports.findById = function(req, res) {
         });
     });
 };
- 
+
 exports.findAll = function(req, res) {
 	console.log('Retrieving all players');
     db.collection('players', function(err, collection) {
@@ -36,7 +36,7 @@ exports.findAll = function(req, res) {
         });
     });
 };
- 
+
 exports.add = function(req, res) {
     var player = req.body;
     console.log('Adding player: ' + JSON.stringify(player));
@@ -50,12 +50,12 @@ exports.add = function(req, res) {
             }
         });
     });
-}
- 
+};
+
 exports.update = function(req, res) {
     var id = req.params.id;
     var player = req.body;
-    
+
     console.log('Updating player: ' + id);
 
     db.collection('players', function(err, collection) {
@@ -69,8 +69,8 @@ exports.update = function(req, res) {
             }
         });
     });
-}
- 
+};
+
 exports.delete = function(req, res) {
     var id = req.params.id;
 
@@ -86,4 +86,45 @@ exports.delete = function(req, res) {
             }
         });
     });
-}
+};
+
+exports.findRewards = function(req, res) {
+    var id = req.params.id;
+    console.log('Retrieving ' + id + '\' rewards');
+    db.collection('players', function(err, collection) {
+        // a voir comment on fait pour avoir des relations et tout ça
+    });
+};
+
+exports.findBadges = function(req, res) {
+    var id = req.params.id;
+    console.log('Retrieving ' + id + '\' badges');
+    db.collection('players', function(err, collection) {
+        // a voir comment on fait pour avoir des relations et tout ça
+    });
+};
+
+exports.findEvents = function(req, res) {
+    var id = req.params.id;
+    console.log('Retrieving ' + id + '\' events history');
+    db.collection('players', function(err, collection) {
+        // a voir comment on fait pour avoir des relations et tout ça
+    });
+};
+
+exports.addEvent = function(req, res) {
+    var id = req.params.id;
+    var events = req.body;
+    console.log('Adding ' + id + '\'s an event : ' + JSON.stringify(player));
+    db.collection('events', function(err, collection) {
+        // a voir comment ça se passe avec les relations et tout ça
+        // collection.insert(events, {safe:true}, function(err, result) {
+        //     if (err) {
+        //         res.send({'error':'An error has occurred'});
+        //     } else {
+        //         console.log('Success: ' + JSON.stringify(result[0]));
+        //         res.send(result[0]);
+        //     }
+        // });
+    });
+};
