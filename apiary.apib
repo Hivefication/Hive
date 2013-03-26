@@ -209,7 +209,7 @@ POST /eventTypes
 }
 
 Edit an event type
-PUT /events/:event
+PUT /eventTypes/:eventType
 > Content-Type: application/json
 {
     "name": "Bar EventType"
@@ -246,7 +246,7 @@ GET /leaderboards/byscore
     ]
 }
 
-By badge
+Leaderboards by badge
 GET /leaderboards/bybadge
 > Content-Type: application/json
 < 200
@@ -266,7 +266,7 @@ GET /leaderboards/bybadge
 Badges administration
 --
 
-List current event types
+List current badges
 GET /badges
 < 200
 < Content-Type: application/json
@@ -317,7 +317,7 @@ PUT /badges/:badge
     "status": "updated"
 }
 
-Delete an event type
+Delete a badge
 DELETE /badges/:badge
 > Content-Type: application/json
 < 200
@@ -330,7 +330,7 @@ DELETE /badges/:badge
 Rewards administration
 --
 
-List current event types
+List current rewards
 GET /rewards
 < 200
 < Content-Type: application/json
