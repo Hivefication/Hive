@@ -10,7 +10,7 @@ db = new Db('players', server);
 db.open(function(err, db) {
     if(!err) {
         console.log("Connected to 'players' for 'leaderboards' database");
-        db.collection('leaderboards', {safe:true}, function(err, collection) {
+        db.collection('players', {safe:true}, function(err, collection) {
             if (err) {
                 console.error("Error opening the 'players' for 'leaderboards' collection.");
             }
@@ -24,7 +24,7 @@ db.open(function(err, db) {
 exports.XXleaderboardsbyscoreYY = function(req, res) {
 	console.log('Retrieving all leaderboards by score');
     db.collection('players', function(err, collection) {
-        collection.find().sort({score: -1}).limit(100); // TODO : fixer la constante                
+        return collection.find().sort({score: -1}).limit(100); // TODO : fixer la constante                
     });
 };
 
@@ -32,12 +32,9 @@ exports.XXleaderboardsbyscoreYY = function(req, res) {
 exports.XXleaderboardsbybadgeYY = function(req, res) {
 	console.log('Retrieving all leaderboards by badge');
     db.collection('players', function(err, collection) {
-        // TODO : requete relative aux nombres de badges en peu plus complexe
-        collection.find().sort(
-            // TODO: Mettre qqch ici :-)
-        ).toArray(function(err, items) {
-            res.send(items);
-        });            
+        return collection.find().sort({badges: -1})  // FIXME : return legal ?       
     });
 };
+
+
 
