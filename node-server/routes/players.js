@@ -1,4 +1,4 @@
-var mongo = require('mongodb');
+/*var mongo = require('mongodb');
 
 var Server = mongo.Server,
     Db = mongo.Db,
@@ -6,6 +6,22 @@ var Server = mongo.Server,
 
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 db = new Db('players', server);
+*/
+
+var playerSchema = new Schema({
+    score: Number,
+    name: String,
+    ref: String
+});
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/hive');
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  console.log("DB opened!");
+});
 
 db.open(function(err, db) {
     if(!err) {
