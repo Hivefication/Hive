@@ -1,48 +1,52 @@
 var model = require('../models/player');
 
-var exportable = ['routes','list','view','add','update','remove','rewards','badges','events','queue'];
-
 var routes = [
     // Player
-    {    
+    {
         'path': '/players',
-        'route': list
-    },{
+        'route': exports.list
+    },
+    {
         'path': '/players/:id',
-        'route': view
-    },{
+        'route': exports.view
+    },
+    {
         'verb': 'post',
         'path': '/players',
-        'route': add
-    },{
+        'route': exports.add
+    },
+    {
         'verb': 'put',
         'path': '/players/:id',
-        'route': update
-    },{
+        'route': exports.update
+    },
+    {
         'verb': 'delete',
         'path': '/players/:id',
-        'route': remove
+        'route': exports.remove
     },
-        // Player's items
+    // Player's items
     {
         'path': '/players/:id/rewards',
-        'route': rewards
-    },{
+        'route': exports.rewards
+    },
+    {
         'path': '/players/:id/badges',
-        'route': badges
+        'route': exports.badges
     },
     // Player's events
     {
         'path': '/players/:id/events',
-        'route': events
-    },{
+        'route': exports.events
+    },
+    {
         'verb': 'post',
         'path': '/players/:id/events',
-        'route': queue
+        'route': exports.queue
     }
 ];
 
-function list(req, res) {
+exports.list = function (req, res) {
     // do pre-processing here    
     model.findAll(function(err, items) {
         console.log('received a callback', err, items)
@@ -51,7 +55,7 @@ function list(req, res) {
     })	
 };
 
-function view(req, res) {
+exports.view = function (req, res) {
     var id = req.params.id;
 
     // do pre-processing here
@@ -61,7 +65,7 @@ function view(req, res) {
     })
 };
 
-function add(req, res) {
+exports.add = function (req, res) {
     var player = req.body;
 
     // do pre-processing here
@@ -78,7 +82,7 @@ function add(req, res) {
     })
 };
 
-function update(req, res) {
+exports.update = function (req, res) {
     var id = req.params.id;
     var player = req.body;
 
@@ -96,7 +100,7 @@ function update(req, res) {
     });
 };
 
-function remove(req, res) {
+exports.remove = function (req, res) {
     var id = req.params.id;
 
     // do pre-processing here
@@ -114,17 +118,17 @@ function remove(req, res) {
     });
 };
 
-function rewards(req, res) {
+exports.rewards = function (req, res) {
     var playerid = req.params.id;
     
     // do pre-processing here
-    model.findRewards(id,function(err, item) {
+    model.findRewards(playerid,function(err, item) {
         // do post-processing here
         res.send(item);
     });
 };
 
-function badges(req, res) {
+exports.badges = function (req, res) {
     var playerid = req.params.id;
     
     // do pre-processing here
@@ -134,7 +138,7 @@ function badges(req, res) {
     });
 };
 
-function events(req, res) {
+exports.events = function (req, res) {
     var playerid = req.params.id;
     
     // do pre-processing here
@@ -144,7 +148,7 @@ function events(req, res) {
     });
 };
 
-function queue(req, res) {
+exports.queue = function (req, res) {
     var id = req.params.id;
     var evt = req.body;
 
@@ -162,13 +166,3 @@ function queue(req, res) {
     })
 
 };
-
-
-/**
- * Automatize exportation of public resources
- */
-for (var index in exportable){
-    var resource = exportable[index];
-    // it's not that evil in this controlled context... for automation's sake!
-    exports[resource] = eval(resource);
-}
