@@ -1,51 +1,5 @@
 var model = require('../models/player');
 
-var routes = [
-    // Player
-    {
-        'path': '/players',
-        'route': exports.list
-    },
-    {
-        'path': '/players/:id',
-        'route': exports.view
-    },
-    {
-        'verb': 'post',
-        'path': '/players',
-        'route': exports.add
-    },
-    {
-        'verb': 'put',
-        'path': '/players/:id',
-        'route': exports.update
-    },
-    {
-        'verb': 'delete',
-        'path': '/players/:id',
-        'route': exports.remove
-    },
-    // Player's items
-    {
-        'path': '/players/:id/rewards',
-        'route': exports.rewards
-    },
-    {
-        'path': '/players/:id/badges',
-        'route': exports.badges
-    },
-    // Player's events
-    {
-        'path': '/players/:id/events',
-        'route': exports.events
-    },
-    {
-        'verb': 'post',
-        'path': '/players/:id/events',
-        'route': exports.queue
-    }
-];
-
 exports.list = function (req, res) {
     // do pre-processing here    
     model.findAll(function(err, items) {
@@ -166,3 +120,53 @@ exports.queue = function (req, res) {
     })
 
 };
+
+
+/**
+ * Always define the routes after the rest of functions!
+ */
+exports.routes = [
+    // Player
+    {
+        'path': '/players',
+        'route': exports.list
+    },
+    {
+        'path': '/players/:id',
+        'route': exports.view
+    },
+    {
+        'verb': 'post',
+        'path': '/players',
+        'route': exports.add
+    },
+    {
+        'verb': 'put',
+        'path': '/players/:id',
+        'route': exports.update
+    },
+    {
+        'verb': 'delete',
+        'path': '/players/:id',
+        'route': exports.remove
+    },
+    // Player's items
+    {
+        'path': '/players/:id/rewards',
+        'route': exports.rewards
+    },
+    {
+        'path': '/players/:id/badges',
+        'route': exports.badges
+    },
+    // Player's events
+    {
+        'path': '/players/:id/events',
+        'route': exports.events
+    },
+    {
+        'verb': 'post',
+        'path': '/players/:id/events',
+        'route': exports.queue
+    }
+];
