@@ -26,8 +26,7 @@ exports.add = function (req, res) {
     model.add(player,function(err, result) {
         // do post-processing here
         if (err){
-            console.warn('Error adding player: ' + err);
-            res.send({'error':'An error has occurred'});
+            res.send({'error':err});
         }
         else {
             console.log('Success: ',result);
@@ -44,8 +43,7 @@ exports.update = function (req, res) {
     model.update(id, player,function(err, result) {
         // do post-processing here
         if (err){
-            console.warn('Error updating player: ' + err);
-            res.send({'error':'An error has occurred'});
+            res.send({'error':err});
         }
         else {
             console.log('Success: ',result);
@@ -62,7 +60,7 @@ exports.remove = function (req, res) {
         // do post-processing here
         if (err){
             console.warn('Error deleting player: ' + err);
-            res.send({'error':'An error has occurred'});
+            res.send({'error':err});
         }
         else {
             console.log('Success: ',result);
@@ -111,7 +109,7 @@ exports.queue = function (req, res) {
         // do post-processing here
         if (err){
             console.warn('Error adding player\'s event: ' + err);
-            res.send({'error':'An error has occurred'});
+            res.send({'error':err});
         }
         else {
             console.log('Success: ',result);
