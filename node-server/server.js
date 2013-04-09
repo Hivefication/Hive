@@ -1,5 +1,6 @@
 var express = require('express');
 var players = require('./controllers/players');
+var eventTypes = require('./controllers/eventtypes');
 var app = express();
 
 function start() {
@@ -10,7 +11,8 @@ function start() {
 		app.use(express.bodyParser());
 	});
 
-	registerRoutes(players.routes);	
+	registerRoutes(players.routes);
+   registerRoutes(eventTypes.routes);	
 	
 	app.listen(8888);
 
