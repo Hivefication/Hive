@@ -3,7 +3,7 @@ var mongoose = dbhandler.mongoose;
 var Schema = mongoose.Schema
 var ObjectId = Schema.ObjectId;
 
-var badgeSchema = new Schema({
+var BadgeSchema = new Schema({
 	// ID auto managed by mongodb
     name: {
         type: String,
@@ -11,11 +11,20 @@ var badgeSchema = new Schema({
     icon: {
         type: String,
     }
+}, {
+    // Prevent id duplication
+    // https://github.com/LearnBoost/mongoose/issues/1137
+    // http://mongoosejs.com/docs/api.html#document_Document-id
+    id: false
+});
+
+BadgeSchema.virtual('url').get(function () {
+    return '/badges/' + this._id;
 });
 
 var collectionName = 'badges';
 
-var Badge = mongoose.model('Badge', badgeSchema, collectionName);
+var Badge = mongoose.model('Badge', BadgeSchema, collectionName);
 
 exports.findById = function(id, callback) {
     console.log('Retrieving badge: ' + id);

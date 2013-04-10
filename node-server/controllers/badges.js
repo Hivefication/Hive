@@ -12,8 +12,7 @@ exports.view = function (req, res) {
     var id = req.params.id;
     
     model.findById(id, function(err, item) {
-        // TODO: add url
-        res.send(item);
+        res.send(item.toJSON({ virtuals: true }));
     })
 };
 
