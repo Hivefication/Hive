@@ -85,3 +85,4 @@ exports.routes = [
         'path': '/badges/:id',
         'route': exports.remove
     },
+];
