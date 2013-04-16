@@ -11,7 +11,13 @@ var eventTypeSchema = new Schema({
         required: true,
         validate: [validate('len', 3)] // minimum 3 chars
     }
-    // ObjectId can be used as a type!
+}, { 
+    id: false, 
+    toJSON: { virtuals: true }
+});
+
+eventTypeSchema.virtual('url').get(function () {
+    return '/eventtypes/' + this._id;
 });
 
 var collectionName = 'eventTypes';
@@ -31,7 +37,7 @@ exports.findAll = function(callback) {
 exports.add = function(eventType, callback) {
     console.log('Adding event type: ' + JSON.stringify(eventType));
     var eventType = new EventType(eventType);
-    EventType.save(callback);
+    eventType.save(callback);
 };
 
 exports.update = function(id, eventType, callback) {
