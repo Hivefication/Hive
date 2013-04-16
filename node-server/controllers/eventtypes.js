@@ -80,26 +80,26 @@ exports.remove = function (req, res) {
 exports.routes = [
     // EventTypes
     {
-        'path': '/eventTypes',
+        'path': '/eventtypes',
         'route': exports.list
     },
     {
-        'path': '/eventTypes/:id',
+        'path': '/eventtypes/:id',
         'route': exports.view
     },
     {
         'verb': 'post',
-        'path': '/eventTypes',
+        'path': '/eventtypes',
         'route': exports.add
     },
     {
         'verb': 'put',
-        'path': '/eventTypes/:id',
+        'path': '/eventtypes/:id',
         'route': exports.update
     },
     {
         'verb': 'delete',
-        'path': '/eventTypes/:id',
+        'path': '/eventtypes/:id',
         'route': exports.remove
     }
 ];
