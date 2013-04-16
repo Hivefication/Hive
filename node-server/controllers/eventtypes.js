@@ -41,7 +41,7 @@ exports.update = function (req, res) {
     var eventType = req.body;
 
     // do pre-processing here
-    model.update(id, eventType,function(err, result) {
+    model.update(id, eventType, function(err, result) {
         // do post-processing here
         if (err){
             console.warn('Error updating an event type: ' + err);

@@ -4,6 +4,7 @@ var eventTypes = require('./controllers/eventtypes');
 var badges = require('./controllers/badges');
 var leaderboards = require('./controllers/leaderboards');
 var rules = require('./controllers/rules');
+var rewards = require('./controllers/rewards');
 var app = express();
 
 function start() {
@@ -19,6 +20,7 @@ function start() {
     registerRoutes(badges.routes);  
     registerRoutes(leaderboards.routes);
     registerRoutes(rules.routes);
+    registerRoutes(rewards.routes);
     
     app.listen(8888);
 
