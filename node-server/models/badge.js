@@ -1,15 +1,16 @@
 var dbhandler = require("../lib/dbhandler");
 var mongoose = dbhandler.mongoose;
 var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
 
-var BadgeSchema = new Schema({
+var badgeSchema = new Schema({
 	// ID auto managed by mongodb
     name: {
         type: String,
+        required: true
     },
     icon: {
         type: String,
+        required: true
     }
 }, {
     // Prevent id duplication
@@ -21,13 +22,13 @@ var BadgeSchema = new Schema({
     toJSON: { virtuals: true }
 });
 
-BadgeSchema.virtual('url').get(function () {
+badgeSchema.virtual('url').get(function () {
     return '/badges/' + this._id;
 });
 
 var collectionName = 'badges';
 
-var Badge = exports.BadgeModel = mongoose.model('Badge', BadgeSchema, collectionName);
+var Badge = mongoose.model('Badge', badgeSchema, collectionName);
 
 exports.findById = function(id, callback) {
     console.log('Retrieving badge: ' + id);
@@ -54,3 +55,5 @@ exports.remove = function(id, callback) {
     console.log('Deleting badge: ' + id);
     Badge.findByIdAndRemove(id, callback);
 };
+
+exports.badgeSchema = badgeSchema;
