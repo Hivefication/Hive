@@ -88,7 +88,7 @@ var leaderBoardProperties = {
 };
 
 exports.findByScore = function(callback){
-    Player.find({},leaderBoardProperties,{sort:'score':-1},callback);
+    Player.find({},leaderBoardProperties,{sort:{'score':-1}},callback);
 };
 
 exports.findByNumBadges = function(callback){

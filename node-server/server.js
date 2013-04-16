@@ -18,7 +18,7 @@ function start() {
     registerRoutes(eventTypes.routes);
     registerRoutes(badges.routes);  
     registerRoutes(leaderboards.routes);
-    registerRoutes(rules.routes);
+    //registerRoutes(rules.routes);
     
     app.listen(8888);
 
