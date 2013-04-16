@@ -1,6 +1,6 @@
 var dbhandler = require("../lib/dbhandler");
 var mongoose = dbhandler.mongoose;
-var Schema = mongoose.Schema
+var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var BadgeSchema = new Schema({
@@ -27,7 +27,7 @@ BadgeSchema.virtual('url').get(function () {
 
 var collectionName = 'badges';
 
-var Badge = mongoose.model('Badge', BadgeSchema, collectionName);
+var Badge = exports.BadgeModel = mongoose.model('Badge', BadgeSchema, collectionName);
 
 exports.findById = function(id, callback) {
     console.log('Retrieving badge: ' + id);
