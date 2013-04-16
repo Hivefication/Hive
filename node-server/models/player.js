@@ -17,7 +17,6 @@ var playerSchema = new Schema({
         type: Number,
         validate: [validate('isInt'),validate('min',0)] // only positive scores
     },
-    badges: ['Badge'],
     name: {
         type: String,
         required: true,
@@ -82,27 +81,26 @@ exports.addEvent = function(playerid, event) {
 };
 
 var leaderBoardProperties = {
-    _id: 0,
     score: 1,
     name: 1,
     ref: 1,
-    badges: 0
+    badges: 1
 };
 
 exports.findByScore = function(callback){
-    //Player.find({},leaderBoardProperties,{sort:{'score':-1}},callback);
-    Player.find({},callback);
+    Player.find({},leaderBoardProperties,{sort:'score':-1},callback);
 };
 
-exports.findByBadges = function(callback){
-    //Player.find({},leaderBoardProperties,{sort:{'badges':-1}},callback);
-    //Player.find({},leaderBoardProperties,{sort:{'badges.count':1}},callback);
-
-    Player.aggregate(
+exports.findByNumBadges = function(callback){
+      Player.aggregate(
+        // project only selected fields
         { $project : leaderBoardProperties }, 
+        // expand the badges array
         { $unwind : "$badges" }, 
+        // then group by id and add counts
         { $group : {  _id : '$_id', numBadges : { $sum : 1 } } },
-        { $sort : { 'numBadges' : 1} },
+        // and sort descending
+        { $sort : { 'numBadges' : -1} },
         callback
     ) 
 }; 

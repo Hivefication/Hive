@@ -1,7 +1,7 @@
 var model = require('../models/player');
 
-exports.byBadge = function (req, res) {
-    model.findByBadges(function(err,items){
+exports.byNumBadges = function (req, res) {
+    model.findByNumBadges(function(err,items){
         console.log(err)
         console.log(items)
         res.send(items);
@@ -23,7 +23,7 @@ exports.routes = [
         'route': exports.byScore
     },
     {
-        'path': '/leaderboards/bybadge',
-        'route': exports.byBadge
+        'path': '/leaderboards/bynumbadges',
+        'route': exports.byNumBadges
     }
 ];
