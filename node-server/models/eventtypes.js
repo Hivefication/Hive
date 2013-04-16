@@ -22,7 +22,7 @@ eventTypeSchema.virtual('url').get(function () {
 
 var collectionName = 'eventTypes';
 
-var EventType = mongoose.model('EventType', eventTypeSchema, collectionName);
+var EventType = exports.EventTypeModel = mongoose.model('EventType', eventTypeSchema, collectionName);
 
 exports.findById = function(id, callback) {
     console.log('Retrieving event type: ' + id);
