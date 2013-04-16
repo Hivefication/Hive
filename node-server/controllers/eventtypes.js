@@ -1,4 +1,4 @@
-var model = require('../models/eventtypes');
+var model = require('../models/eventtype');
 
 exports.list = function (req, res) {
     // do pre-processing here    
@@ -15,8 +15,6 @@ exports.view = function (req, res) {
     // do pre-processing here
     model.findById(id,function(err, item) {
         // do post-processing here
-        // TODO add the url field here
-        item.url = "/eventTypes/" + item.id
         res.send(item);
     })
 };
@@ -51,7 +49,7 @@ exports.update = function (req, res) {
         }
         else {
             console.log('Success: ',result);
-            res.send(result);
+            res.send(result.toJSON({ virtuals: true }));
         }
     });
 };
