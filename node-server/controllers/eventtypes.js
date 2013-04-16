@@ -1,4 +1,4 @@
-var model = require('../models/eventtypes');
+var model = require('../models/eventtype');
 
 exports.list = function (req, res) {
     // do pre-processing here    
