@@ -172,31 +172,31 @@ EventsTypes administration
 --
 
 List current event types
-GET /eventTypes
+GET /eventtypes
 < 200
 < Content-Type: application/json
 {
     "items":[
         {
             "id":1,
-            "url":"/eventTypes/1",
+            "url":"/eventtypes/1",
             "name":"Foo EventType"
         }
     ]
 }
 
 Get information about an event type
-GET /eventTypes/:eventType
+GET /eventtypes/:eventtype
 < 200
 < Content-Type: application/json
 {
     "id":1,
     "name":"Foo EventType",
-    "url":"/eventTypes/1"
+    "url":"/eventtypes/1"
 }
 
 Create an event type
-POST /eventTypes
+POST /eventtypes
 > Content-Type: application/json
 {
     "name": "Foo EventType"
@@ -204,12 +204,12 @@ POST /eventTypes
 < 201
 {
     "status": "created",
-    "url": "/eventTypes/1",
+    "url": "/eventtypes/1",
     "id": "1"
 }
 
 Edit an event type
-PUT /eventTypes/:eventType
+PUT /eventtypes/:id
 > Content-Type: application/json
 {
     "name": "Bar EventType"
@@ -220,7 +220,7 @@ PUT /eventTypes/:eventType
 }
 
 Delete an event type
-DELETE /eventTypes/:eventTypes
+DELETE /eventtypes/:id
 > Content-Type: application/json
 < 200
 {

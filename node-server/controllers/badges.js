@@ -2,17 +2,16 @@ var model = require('../models/badge');
 
 exports.list = function (req, res) {
     model.findAll(function(err, items) {
-        console.log('received a callback', err, items)
-        // TODO: add url
+        console.log('received a callback', err, items);
         res.send(items);
-    })	
+    });
 };
 
 exports.view = function (req, res) {
     var id = req.params.id;
     
     model.findById(id, function(err, item) {
-        res.send(item.toJSON({ virtuals: true }));
+        res.send(item);
     })
 };
 

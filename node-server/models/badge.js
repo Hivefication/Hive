@@ -15,7 +15,10 @@ var BadgeSchema = new Schema({
     // Prevent id duplication
     // https://github.com/LearnBoost/mongoose/issues/1137
     // http://mongoosejs.com/docs/api.html#document_Document-id
-    id: false
+    id: false,
+    // Prevent to specify later while retrieving both on findById and findAll
+    // http://stackoverflow.com/questions/14767902/how-to-get-only-virtual-attributes-node-js-mongoose-mongodb
+    toJSON: { virtuals: true }
 });
 
 BadgeSchema.virtual('url').get(function () {
