@@ -9,8 +9,9 @@ var RuleSchema = new Schema({
     durationInMinutes: { type: Number},
     arg: { type: String },
     eventCounter: { type: Number },
-    // FIXME: One to one
-    event: [EventTypeSchema]
+    // It's impossible to embed a single schema into another, we have to use an relational approach
+    // https://github.com/LearnBoost/mongoose/issues/495
+    event: { type: ObjectId, ref: 'EventType' }
 }, {
     // Prevent id duplication
     // https://github.com/LearnBoost/mongoose/issues/1137
@@ -27,16 +28,16 @@ RuleSchema.virtual('url').get(function () {
 
 var collectionName = 'rules';
 
-var Rule = exports.RuleModel = mongoose.model('Rule', RuleSchema, collectionName);
+var Rule = mongoose.model('Rule', RuleSchema, collectionName);
 
 exports.findById = function(id, callback) {
     console.log('Retrieving rule: ' + id);
-    Rule.findById(id, callback);
+    Rule.findById(id).populate('event').exec(callback);
 };
 
 exports.findAll = function(callback) {
 	console.log('Retrieving all rules');
-	Rule.find({}, callback);
+	Rule.find({}).populate('event').exec(callback);
 };
 
 exports.add = function(rule, callback) {
@@ -54,3 +55,5 @@ exports.remove = function(id, callback) {
     console.log('Deleting rule: ' + id);
     Rule.findByIdAndRemove(id, callback);
 };
+
+exports.RuleModel = Rule;
