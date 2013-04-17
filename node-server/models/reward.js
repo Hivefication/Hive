@@ -45,7 +45,8 @@ RewardSchema.virtual('url').get(function () {
 
 var collectionName = 'rewards';
 
-var Reward = exports.RewardsModel = mongoose.model('Reward', RewardSchema, collectionName);
+exports.rewardSchema = RewardSchema;
+var Reward =  mongoose.model('Reward', RewardSchema, collectionName);
 
 exports.findById = function(id, callback) {
     console.log('Retrieving reward: ' + id);
