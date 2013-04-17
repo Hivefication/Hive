@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var EventTypeSchema = require('./eventtype.js').EventTypeSchema;
 var ObjectId = Schema.ObjectId;
 
-var RuleSchema = new Schema({
+var ruleSchema = new Schema({
     // ID auto managed by mongodb
     durationInMinutes: { type: Number},
     arg: { type: String },
@@ -22,13 +22,13 @@ var RuleSchema = new Schema({
     toJSON: { virtuals: true }
 });
 
-RuleSchema.virtual('url').get(function () {
-    return '/rules/' + this._id;
-});
-
 var collectionName = 'rules';
 
-var Rule = mongoose.model('Rule', RuleSchema, collectionName);
+ruleSchema.virtual('url').get(function () {
+    return '/' + collectionName + '/' + this._id;
+});
+
+var Rule = mongoose.model('Rule', ruleSchema, collectionName);
 
 exports.findById = function(id, callback) {
     console.log('Retrieving rule: ' + id);
@@ -56,4 +56,4 @@ exports.remove = function(id, callback) {
     Rule.findByIdAndRemove(id, callback);
 };
 
-exports.RuleModel = Rule;
+exports.ruleSchema = ruleSchema;

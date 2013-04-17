@@ -6,6 +6,8 @@ var validate = require('mongoose-validator').validate;
 
 var badgeSchema = require("../models/badge").badgeSchema;
 var rewardSchema = require("../models/reward").rewardSchema;
+var eventSchema = require("../models/event").eventSchema;
+var EventModel = require("../models/event").Event;
 
 // https://github.com/chriso/node-validator
 // https://npmjs.org/package/mongoose-validator
@@ -17,6 +19,8 @@ var playerSchema = new Schema({
     // ObjectId can be used as a type!
     score: {
         type: Number,
+        required: true,
+        default: 0,
         validate: [validate('isInt'),validate('min',0)] // only positive scores
     },
     name: {
@@ -29,7 +33,8 @@ var playerSchema = new Schema({
         validate: [validate('len',3)] // minimum 3 chars
     },
     rewards: [rewardSchema],
-    badges: [badgeSchema]
+    badges: [badgeSchema],
+    events: [eventSchema]
 },
 {
     // Prevent id duplication
@@ -75,22 +80,62 @@ exports.remove = function(id, callback) {
 
 exports.findRewards = function(playerid, callback) {
     console.log('Retrieving ' + playerid + '\' rewards');
-    //
+    Player.findById(playerid,function(err, item){
+        if (err){
+            callback(err,item);
+            return;
+        }
+        
+        callback(null,item.rewards||[]);
+    })
 };
 
 exports.findBadges = function(playerid, callback) {
     console.log('Retrieving ' + playerid + '\' badges');
-    //
+    Player.findById(playerid,function(err, item){
+        if (err){
+            callback(err,item);
+            return;
+        }
+        
+        callback(null,item.badges||[]);
+    })
 };
 
 exports.findEvents = function(playerid, callback) {
     console.log('Retrieving ' + playerid + '\' events history');
-    //
+    Player.findById(playerid,function(err, item){
+        if (err){
+            callback(err,item);
+            return;
+        }
+        
+        callback(null,item.events||[]);
+    })
 };
 
-exports.addEvent = function(playerid, event) {
-    console.log('Adding ' + playerid + '\'s an event : ' + JSON.stringify(event));
-    //
+exports.addEvent = function(player, eventType, callback) {
+    console.log('Adding an event to ' + player._id + ' : ' + JSON.stringify(eventType));
+
+    var evt = new EventModel({
+        eventTypeId: eventType._id,
+        playerId: player._id
+    });
+
+    player.events = player.events || [];
+    player.events.push(evt);
+
+    // Fuckin' experimental frameworks...
+    // https://github.com/LearnBoost/mongoose/issues/571
+    Player.update({_id:player._id}, {$set: {events: player.events}}, {upsert:true}, callback);
+};
+
+exports.addBadge = function(player,badge,callback){
+    // just copy the pattern of exports.addEvent
+};
+
+exports.addReward = function(player, reward, callback){
+    // just copy the pattern of exports.addEvent
 };
 
 var leaderBoardProperties = {

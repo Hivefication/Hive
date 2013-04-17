@@ -10,7 +10,7 @@ var eventTypeSchema = new Schema({
         type: String,
         required: true,
         validate: [validate('len', 3)] // minimum 3 chars
-    }
+    },
 }, { 
     // Prevent id duplication
     // https://github.com/LearnBoost/mongoose/issues/1137
@@ -21,13 +21,13 @@ var eventTypeSchema = new Schema({
     toJSON: { virtuals: true }
 });
 
-eventTypeSchema.virtual('url').get(function () {
-    return '/eventtypes/' + this._id;
-});
-
 var collectionName = 'eventTypes';
 
-var EventType = exports.EventTypeModel = mongoose.model('EventType', eventTypeSchema, collectionName);
+eventTypeSchema.virtual('url').get(function () {
+    return '/' + collectionName + '/' + this._id;
+});
+
+var EventType = mongoose.model('EventType', eventTypeSchema, collectionName);
 
 exports.findById = function(id, callback) {
     console.log('Retrieving event type: ' + id);
@@ -54,3 +54,5 @@ exports.remove = function(id, callback) {
     console.log('Deleting event type: ' + id);
     EventType.findByIdAndRemove(id,callback);
 };
+
+exports.eventTypeSchema = eventTypeSchema;

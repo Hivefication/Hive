@@ -47,7 +47,7 @@ exports.update = function (req, res) {
         }
         else {
             console.log('Success: ',result);
-            res.send(result);
+            res.send({status:'updated'});
         }
     });
 };
@@ -100,24 +100,66 @@ exports.events = function (req, res) {
     });
 };
 
-exports.queue = function (req, res) {
-    var id = req.params.id;
+exports.addEvent = function (req, res) {
+    var playerid = req.params.id;
     var evt = req.body;
 
-    // do pre-processing here
-    model.addEvent(playerid, evt,function(err, result) {
-        // do post-processing here
+    var EventType = require('../models/eventtype');
+
+    // check that the event type exists, overwrites evt's scope
+    EventType.findById(evt._id,function(err,evt){
         if (err){
-            console.warn('Error adding player\'s event: ' + err);
+            console.warn('The event does not exist: ' + err);
             res.send({'error':err});
+            return;
         }
-        else {
-            console.log('Success: ',result);
-            res.send(result);
-        }
-    })
+
+        // check that the player exists
+        model.findById(playerid,function(err,player){
+            if (err){
+                console.warn('The player does not exist: ' + err);
+                res.send({error:err})
+                return;
+            }
+
+            // and now add the event to the player
+            model.addEvent(player, evt,function(err, result) {
+                // do post-processing here
+                if (err){
+                    console.warn('Error adding player\'s event: ' + err);
+                    res.send({'error':err});
+                }
+                else {
+                    console.log('Success: ',result);
+                    res.send({status:'success'});
+                }
+            })
+        });
+        
+        
+    });
 
 };
+
+
+exports.addReward = function (req, res) {
+    var playerid = req.params.id;
+    var badge = req.body;
+
+    // just copy the pattern of exports.addEvent
+
+    res.send({status:'success'});
+}
+
+exports.addBadge = function (req, res) {
+    var playerid = req.params.id;
+    var badge = req.body;
+
+    // just copy the pattern of exports.addEvent
+
+    res.send({status:'success'});
+}
+
 
 
 /**
@@ -148,14 +190,25 @@ exports.routes = [
         'path': '/players/:id',
         'route': exports.remove
     },
-    // Player's items
+    // Player's rewards
     {
         'path': '/players/:id/rewards',
         'route': exports.rewards
     },
     {
+        'verb': 'post',
+        'path': '/players/:id/rewards',
+        'route': exports.addReward
+    },
+    // Player's badges
+    {
         'path': '/players/:id/badges',
         'route': exports.badges
+    },
+    {
+        'verb': 'post',
+        'path': '/players/:id/badges',
+        'route': exports.addBadge
     },
     // Player's events
     {
@@ -165,6 +218,6 @@ exports.routes = [
     {
         'verb': 'post',
         'path': '/players/:id/events',
-        'route': exports.queue
+        'route': exports.addEvent
     }
 ];

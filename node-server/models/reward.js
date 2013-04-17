@@ -3,8 +3,8 @@ var mongoose = dbhandler.mongoose;
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var validate = require('mongoose-validator').validate;
-var badgeModel = require("../models/badge").badgeModel;
-var ruleModel = require("../models/rule").ruleModel;
+var badgeSchema = require("../models/badge").badgeSchema;
+var ruleSchema = require("../models/rule").ruleSchema;
 
 var collectionName = 'rewards';
 
@@ -34,8 +34,8 @@ var rewardSchema = new Schema({
         type: Boolean,
         default: false
     },
-    badges: [badgeModel],
-    rules: [ruleModel]
+    badges: [badgeSchema],
+    rules: [ruleSchema]
 }, { 
     // Prevent id duplication
     // https://github.com/LearnBoost/mongoose/issues/1137
