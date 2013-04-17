@@ -32,19 +32,17 @@ var playerSchema = new Schema({
     badges: [badgeSchema]
 },
 {
+    // Prevent id duplication
+    // https://github.com/LearnBoost/mongoose/issues/1137
+    // http://mongoosejs.com/docs/api.html#document_Document-id
+    id: false,
+    // Prevent to specify later while retrieving both on findById and findAll
+    // http://stackoverflow.com/questions/14767902/how-to-get-only-virtual-attributes-node-js-mongoose-mongodb
     toJSON: { virtuals: true }
 });
 
 playerSchema.virtual('url').get(function () {
     return "/" + collectionName + "/" + this._id;
-});
-
-playerSchema.virtual('rewardsUrl').get(function () {
-    return "/" + collectionName + "/" + this._id + "/rewards";
-});
-
-playerSchema.virtual('badgesUrl').get(function () {
-    return "/" + collectionName + "/" + this._id + "/badges";
 });
 
 var Player = mongoose.model('Player', playerSchema,collectionName);
