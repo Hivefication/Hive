@@ -2,6 +2,8 @@ var dbhandler = require("../lib/dbhandler");
 var mongoose = dbhandler.mongoose;
 var Schema = mongoose.Schema;
 
+var collectionName = 'badges';
+
 var badgeSchema = new Schema({
 	// ID auto managed by mongodb
     name: {
@@ -23,10 +25,8 @@ var badgeSchema = new Schema({
 });
 
 badgeSchema.virtual('url').get(function () {
-    return '/badges/' + this._id;
+    return collectionName + this._id;
 });
-
-var collectionName = 'badges';
 
 var Badge = mongoose.model('Badge', badgeSchema, collectionName);
 
