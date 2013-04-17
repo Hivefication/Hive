@@ -3,10 +3,10 @@ var mongoose = dbhandler.mongoose;
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var validate = require('mongoose-validator').validate;
-var BadgeModel = require("../models/badge").BadgeModel;
-var RuleModel = require("../models/rule").RuleModel;
+var badgeModel = require("../models/badge").badgeModel;
+var ruleModel = require("../models/rule").ruleModel;
 
-var RewardSchema = new Schema({
+var rewardSchema = new Schema({
 	// no need to specify id... it is automanaged by mongodb
     name: {
         type: String,
@@ -32,8 +32,8 @@ var RewardSchema = new Schema({
         type: Boolean,
         default: false
     },
-    badges: [BadgeModel],
-    rules: [RuleModel]
+    badges: [badgeModel],
+    rules: [ruleModel]
 }, { 
     id: false, 
     toJSON: { virtuals: true }
