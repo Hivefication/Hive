@@ -10,6 +10,8 @@ var rewardSchema = require("../models/reward").rewardSchema;
 // https://github.com/chriso/node-validator
 // https://npmjs.org/package/mongoose-validator
 
+var collectionName = 'players';
+
 var playerSchema = new Schema({
 	// no need to specify id... it is automanaged by mongodb
     // ObjectId can be used as a type!
@@ -28,9 +30,22 @@ var playerSchema = new Schema({
     },
     rewards: [rewardSchema],
     badges: [badgeSchema]
+},
+{
+    toJSON: { virtuals: true }
 });
 
-var collectionName = 'players';
+playerSchema.virtual('url').get(function () {
+    return "/" + collectionName + "/" + this._id;
+});
+
+playerSchema.virtual('rewardsUrl').get(function () {
+    return "/" + collectionName + "/" + this._id; + "/rewards";
+});
+
+playerSchema.virtual('badgesUrl').get(function () {
+    return "/" + collectionName + "/" + this._id + "/badges";
+});
 
 var Player = mongoose.model('Player', playerSchema,collectionName);
 
