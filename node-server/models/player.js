@@ -5,7 +5,7 @@ var ObjectId = Schema.ObjectId;
 var validate = require('mongoose-validator').validate;
 
 var badgeSchema = require("../models/badge").badgeSchema;
-//var RewardModel = require("../models/reward").RewardModel;
+var RewardModel = require("../models/reward").RewardModel;
 
 // https://github.com/chriso/node-validator
 // https://npmjs.org/package/mongoose-validator
@@ -26,7 +26,7 @@ var playerSchema = new Schema({
         type: String,
         validate: [validate('len',3)] // minimum 3 chars
     },
-    //rewards: [RewardModel],
+    rewards: [RewardModel],
     badges: [badgeSchema]
 });
 
