@@ -6,6 +6,8 @@ var validate = require('mongoose-validator').validate;
 var badgeModel = require("../models/badge").badgeModel;
 var ruleModel = require("../models/rule").ruleModel;
 
+var collectionName = 'rewards';
+
 var rewardSchema = new Schema({
 	// no need to specify id... it is automanaged by mongodb
     name: {
@@ -39,14 +41,11 @@ var rewardSchema = new Schema({
     toJSON: { virtuals: true }
 });
 
-RewardSchema.virtual('url').get(function () {
-    return '/rewards/' + this._id;
+rewardSchema.virtual('url').get(function () {
+    return '/' + collectionName + '/' + this._id;
 });
 
-var collectionName = 'rewards';
-
-exports.rewardSchema = RewardSchema;
-var Reward =  mongoose.model('Reward', RewardSchema, collectionName);
+var Reward =  mongoose.model('Reward', rewardSchema, collectionName);
 
 exports.findById = function(id, callback) {
     console.log('Retrieving reward: ' + id);
@@ -133,3 +132,5 @@ exports.removeBadge = function(id, badgeid, callback) {
         }
     });
 };
+
+exports.rewardSchema = rewardSchema;
