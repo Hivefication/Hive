@@ -25,7 +25,7 @@ var badgeSchema = new Schema({
 });
 
 badgeSchema.virtual('url').get(function () {
-    return collectionName + this._id;
+    return collectionName + "/" + this._id;
 });
 
 var Badge = mongoose.model('Badge', badgeSchema, collectionName);
