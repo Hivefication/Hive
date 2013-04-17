@@ -40,7 +40,7 @@ playerSchema.virtual('url').get(function () {
 });
 
 playerSchema.virtual('rewardsUrl').get(function () {
-    return "/" + collectionName + "/" + this._id; + "/rewards";
+    return "/" + collectionName + "/" + this._id + "/rewards";
 });
 
 playerSchema.virtual('badgesUrl').get(function () {
