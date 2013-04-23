@@ -3,8 +3,13 @@ var mongoose = dbhandler.mongoose;
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 var validate = require('mongoose-validator').validate;
+
 var badgeSchema = require("../models/badge").badgeSchema;
 var ruleSchema = require("../models/rule").ruleSchema;
+
+
+var BadgeModel = require("../models/badge").Badge;
+var RuleModel = require("../models/rule").Rule;
 
 var collectionName = 'rewards';
 
@@ -97,10 +102,14 @@ exports.removeRule = function(id, ruleid, callback) {
     console.log('Releting rule: ' + ruleid + ' to reward : ' + id)
     Reward.findById(id, function(err, reward) {
         if (!err){
-            reward.rules.id(ruleid).remove();
-            reward.save(function (err_save) {
-                callback(err_save);
-            });
+            try{
+                reward.rules.id(ruleid).remove();
+                reward.save(function (err_save) {
+                    callback(err_save);
+                });
+            }catch(ex){
+                callback("Rule id : " + badgeid + " not found in the reward. Exeption : " + ex);
+            }
         }
         else {
             callback(err);
@@ -127,10 +136,14 @@ exports.removeBadge = function(id, badgeid, callback) {
     console.log('Deleting badge: ' + badgeid + ' to reward : ' + id)
     Reward.findById(id, function(err, reward) {
         if (!err){
-            reward.badges.id(badgeid).remove();
-            reward.save(function (err_save) {
-                callback(err_save);
-            });
+            try{
+                reward.badges.id(badgeid).remove();
+                reward.save(function (err_save) {
+                    callback(err_save);
+                });
+            }catch(ex){
+                callback("Badge id : " + badgeid + " not found in the reward. Exeption : " + ex);
+            }
         }
         else {
             callback(err);

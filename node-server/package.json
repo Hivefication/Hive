@@ -1,6 +1,6 @@
 {
-    "name": "test-server",
-    "description": "A Test version",
+    "name": "Hive",
+    "description": "A new gamification engine.",
     "Server": "0.0.1",
     "private": true,
     "dependencies": {
