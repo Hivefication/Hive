@@ -28,7 +28,7 @@ exports.add = function (req, res) {
 	model.add(eventType,function(err, result) {
 		// do post-processing here
 		if (err){
-			console.warn('Error adding an event type: ' + err);
+			console.warn('Error adding a reward: ' + err);
 			res.send({'error':'An error has occurred'});
 		}
 		else {
@@ -46,7 +46,7 @@ exports.update = function (req, res) {
 	model.update(id, reward,function(err, result) {
 		// do post-processing here
 		if (err){
-			console.warn('Error updating an event type: ' + err);
+			console.warn('Error updating a reward: ' + err);
 			res.send({'error':'An error has occurred'});
 		}
 		else {
@@ -63,7 +63,7 @@ exports.remove = function (req, res) {
 	model.remove(id, function(err, result) {
 		// do post-processing here
 		if (err){
-			console.warn('Error deleting an event type: ' + err);
+			console.warn('Error deleting a reward: ' + err);
 			res.send({'error':'An error has occurred'});
 		}
 		else {
