@@ -1,0 +1,18 @@
+ language: node_js
+ 
+ node_js:
+   - "0.10"
+
+ services:
+  - mongodb
+
+ before_script:
+  - cd node-server
+  - npm install
+  - node index.js > run.log &
+  
+ after_script:
+  - killall -9 node
+
+ notification:
+  email: false
