@@ -1,10 +1,4 @@
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'test',
-  password : 'test',
-  database : 'mango',
-});
+var Mongo = require('mongodb').MongoClient;
 
 var surnames = new Array("joel", "greg", "jorge", "nicolas", "patrick", "guillaume", "naim", "stephane", "jonas", "delphine", "marie", "catherine", "fany", "jeanne", "jean", "lulu", "robert", "fabrice", "monica", "david");
 
@@ -14,53 +8,44 @@ var NBUSERS  = 1000;
 var NBBADGES = 100;
 var NBBADGESMAX = 10;
 
-connection.connect();
-
-connection.query('DELETE FROM T_User;', function(err, rows, fields) {
-    if (err) {
-    throw err;
-    }
-});
-
-connection.query('DELETE FROM T_Badge;', function(err, rows, fields) {
-    if (err) {
-    throw err;
-    }
-});
-
-for(var i = 0; i < NBBADGES; i++){
-    var name = 'badge ' + i;
-    connection.query('INSERT INTO T_Vadge (idBadge, name) values (\"'+(i+1)+'\",\"'+name+'\");', function(err, rows, fields) {
-        if (err) {
-        throw err;
-        }
-    });
-}
-
+var userNames = new Array();
+var userSurnames = new Array();
 for(var i = 0; i < NBUSERS; i++){
-    var name = names[Math.floor((Math.random()*names.length)+1)];
-    var surname = surnames[Math.floor((Math.random()*surnames.length)+1)];
-    connection.query('INSERT INTO T_User (idUser, name, surname) values (\"'+(i+1)+'\",\"'+name+'\",\"'+surname+'\");', function(err, rows, fields) {
-        if (err) {
-        throw err;
-        }
-    });
-    
-    for(var j = 0; j<Math.floor((Math.random()*NBBADGESMAX)+1); j++){
-        connection.query('INSERT INTO T_User (idUser, name, surname) values (\"'+(i+1)+'\",\"'+name+'\",\"'+surname+'\");', function(err, rows, fields) {
-            if (err) {
-            throw err;
-            }
-        });
-    }
+	userNames[i] = names[Math.floor((Math.random()*names.length)+1)];
+	userSurnames[i] = surnames[Math.floor((Math.random()*surnames.length)+1)];
 }
 
-connection.query('SELECT name as name FROM T_User', function(err, rows, fields) {
-  if (err) throw err;
+Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
+	
+	if(err) { 
+		return console.dir(err);
+	}
 
-  for (var i = 0; i < rows.length; i++)
-    console.log(rows[i].name);
-    
+	var Users = db.createCollection('Users', function(err, collection) {});
+	var Badges = db.createCollection('Badges', function(err, collection) {});
+
+	Users.remove();
+	Badges.remove();
+
+	for(var i = 0; i < NBBADGES; i++){
+		var name = 'badge ' + i;
+		Badges.insert({'name':name}, {w:1}, function(err, result) { });
+	}
+
+	for(var i = 0; i < NBUSERS; i++){
+		Users.insert({'name':userNames[i], 'surname':userSurnames[i]}, {w:1}, function(err, result){
+			if (err){
+				console.log(err);
+			}
+			else{}
+				for(var j = 0; j<Math.floor((Math.random()*NBBADGESMAX)+1); j++){
+					var name = 'badge ' + j;
+					Users.update({_id:result._id}, {$push:{badges:{'name':name}}}, {w:1}, function(err, result) {});
+				}
+			}
+		});
+		
+	}
+
+	// Select query
 });
-
-connection.end();
