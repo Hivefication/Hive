@@ -1,4 +1,6 @@
 var mysql      = require('mysql');
+var async = require('async');
+
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'test',
@@ -132,10 +134,12 @@ function time(func, namefunc){
     console.log('durée : ' + elapsed);
 }
   
-
 time(createDatabase(), 'createDatabase');
 
 time(queryLookup(), 'queryLookup');
+
+// http://www.sebastianseilund.com/nodejs-async-in-practice
+// pour le synchrone
 
 connection.end();
 
