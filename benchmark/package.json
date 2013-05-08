@@ -1,0 +1,8 @@
+{
+    "name": "Benchmark",
+    "description": "Benchmark project for mongodb and mysql.",
+    "private": true,
+    "dependencies": {
+        "mongodb": "1.2.x"
+    }
+}
