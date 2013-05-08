@@ -16,21 +16,76 @@ var NBBADGESMAX = 10;
 
 connection.connect();
 
-connection.query('DELETE FROM T_User;', function(err, rows, fields) {
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// Creation tables
+
+connection.query('DROP TABLE IF EXISTS T_BadgeUser;', function(err, rows, fields) {
     if (err) {
     throw err;
     }
 });
 
-connection.query('DELETE FROM T_Badge;', function(err, rows, fields) {
+connection.query('DROP TABLE IF EXISTS T_User;', function(err, rows, fields) {
     if (err) {
     throw err;
     }
 });
+connection.query('DROP TABLE IF EXISTS T_Badge;', function(err, rows, fields) {
+    if (err) {
+    throw err;
+    }
+});
+
+
+
+var create = new Array();
+create[0] = 'CREATE  TABLE IF NOT EXISTS T_User ( \
+  `idUser` INT NOT NULL AUTO_INCREMENT , \
+  `name` VARCHAR(30) NULL , \
+  `surname` VARCHAR(45) NULL , \
+  PRIMARY KEY (`idUser`) , \
+  INDEX `flkNameUser` (`name` ASC) , \
+  INDEX `flkSurnameUser` (`surname` ASC) ) \
+ENGINE = InnoDB;';
+
+create[1] = 'CREATE  TABLE IF NOT EXISTS T_Badge ( \
+  `idBadge` INT NOT NULL AUTO_INCREMENT , \
+  `name` VARCHAR(30) NULL , \
+  PRIMARY KEY (`idBadge`) , \
+  INDEX `flkName` (`name` ASC) ) \
+ENGINE = InnoDB;';
+
+create[2] = 'CREATE  TABLE IF NOT EXISTS T_BadgeUser ( \
+  `idBadge` INT NOT NULL , \
+  `idUser` INT NOT NULL , \
+  PRIMARY KEY (`idBadge`, `idUser`) , \
+  INDEX `fk_T_Badge_has_T_User_T_User1` (`idUser` ASC) , \
+  INDEX `fk_T_Badge_has_T_User_T_Badge` (`idBadge` ASC) , \
+  CONSTRAINT `fk_T_Badge_has_T_User_T_Badge` \
+    FOREIGN KEY (`idBadge` ) \
+    REFERENCES `mango`.`T_Badge` (`idBadge` ) \
+    ON DELETE NO ACTION \
+    ON UPDATE NO ACTION, \
+  CONSTRAINT `fk_T_Badge_has_T_User_T_User1` \
+    FOREIGN KEY (`idUser` ) \
+    REFERENCES `mango`.`T_User` (`idUser` ) \
+    ON DELETE NO ACTION \
+    ON UPDATE NO ACTION) \
+ENGINE = InnoDB;';
+
+for(var i = 0; i < create.length; i++){
+    connection.query(create[i], function(err, rows, fields) {
+        if (err) {
+        throw err;
+        }
+    });
+};
+
+
 
 for(var i = 0; i < NBBADGES; i++){
     var name = 'badge ' + i;
-    connection.query('INSERT INTO T_Vadge (idBadge, name) values (\"'+(i+1)+'\",\"'+name+'\");', function(err, rows, fields) {
+    connection.query('INSERT INTO T_Badge (idBadge, name) values (\"'+(i+1)+'\",\"'+name+'\");', function(err, rows, fields) {
         if (err) {
         throw err;
         }
@@ -62,5 +117,6 @@ connection.query('SELECT name as name FROM T_User', function(err, rows, fields) 
     console.log(rows[i].name);
     
 });
+
 
 connection.end();
