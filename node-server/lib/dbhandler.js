@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 // initialize just the first time
 if (!db){	
-	mongoose.connect('mongodb://localhost:3002/meteor');
+	mongoose.connect('mongodb://localhost/hive');
 
 	db = mongoose.connection;
 	db.on('error', console.error.bind(console, 'connection error:'));
