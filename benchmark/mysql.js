@@ -20,7 +20,7 @@ connection.connect();
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Creation tables
-function createDatabase(){
+function createDatabase(callback){
     connection.query('DROP TABLE IF EXISTS T_BadgeUser;', function(err, rows, fields) {
         if (err) {
         throw err;
@@ -76,54 +76,32 @@ function createDatabase(){
     ENGINE = InnoDB;';
 
     for(var i = 0; i < create.length; i++){
-        connection.query(create[i], function(err, rows, fields) {
-            if (err) {
-            throw err;
-            }
-        });
+        connection.query(create[i]);
     };
 
-
-    var from = new Date().getMilliseconds();
-    var elapsed;
-    
     for(var i = 0; i < NBBADGES; i++){
         var name = 'badge ' + i;
-        connection.query('INSERT INTO T_Badge (idBadge, name) values (\"'+(i+1)+'\",\"'+name+'\");', function(err, rows, fields) {
-                elapsed = new Date().getMilliseconds() - from;
-                
-            console.log(i);
-            if(i==NBBADGES-2)
-                console.log('durée : ' + elapsed);           
-            if (err) {
-            throw err;
-            }
-        });
+        connection.query('INSERT INTO T_Badge (idBadge, name) values (\"'+(i+1)+'\",\"'+name+'\");');
     }
 
     for(var i = 0; i < NBUSERS; i++){
         var name = names[Math.floor((Math.random()*names.length)+1)];
         var surname = surnames[Math.floor((Math.random()*surnames.length)+1)];
-        connection.query('INSERT INTO T_User (idUser, name, surname) values (\"'+(i+1)+'\",\"'+name+'\",\"'+surname+'\");', function(err, rows, fields) {
-            if (err) {
-            throw err;
-            }
-        });
+        connection.query('INSERT INTO T_User (idUser, name, surname) values (\"'+(i+1)+'\",\"'+name+'\",\"'+surname+'\");');
         
         var no = 0;
         for(var j = 0; j<Math.floor((Math.random()*NBBADGESMAX)+1); j++){
             no += Math.floor((Math.random()*NBBADGESMAX)+1);
-            connection.query('INSERT INTO T_BadgeUser (idUser, idBadge) values (\"'+(i+1)+'\",\"'+no+'\");', function(err, rows, fields) {
-                if (err) {
-                throw err;
-                }
-            });
+            connection.query('INSERT INTO T_BadgeUser (idUser, idBadge) values (\"'+(i+1)+'\",\"'+no+'\");');
         }
     }
+    
+    connection.query('SELECT 1 + 1', callback);
+    //callback();
 }
 
 
-function queryLookup(){
+function queryLookup(callback){
     connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE U.idUser = 23 ', function(err, rows, fields) {
       if (err) throw err;
 
@@ -131,17 +109,33 @@ function queryLookup(){
         console.log(rows[i].nameUser + ' ' + rows[i].surname + ' ' + rows[i].namebadge);
         
     });
+    
+    connection.query('SELECT 1 + 1', callback);
 }
 
-function time(func, namefunc){
-    console.log('compute ' + namefunc);
-    var from = new Date().getMilliseconds();
-    func;
-    var elapsed = new Date().getMilliseconds() - from;
-    console.log('durée : ' + elapsed);
-}
-  
-createDatabase();
+
+
+var from, elapsed;
+async.series([
+    function(callback){
+        console.log('start create database');
+        from = new Date();
+        createDatabase(callback);
+    },
+    function(callback){
+        console.log('start lookup');
+        from = new Date();
+        queryLookup(callback);
+    }
+],
+function(err, rows, fields){
+    elapsed = new Date()
+    var diff = elapsed.getTime() - from.getTime();
+    console.log('durée create database : ' + diff);
+});
+
+
+
 
 
 //time(queryLookup(), 'queryLookup');
