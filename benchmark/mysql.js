@@ -84,10 +84,17 @@ function createDatabase(){
     };
 
 
-
+    var from = new Date().getMilliseconds();
+    var elapsed;
+    
     for(var i = 0; i < NBBADGES; i++){
         var name = 'badge ' + i;
         connection.query('INSERT INTO T_Badge (idBadge, name) values (\"'+(i+1)+'\",\"'+name+'\");', function(err, rows, fields) {
+                elapsed = new Date().getMilliseconds() - from;
+                
+            console.log(i);
+            if(i==NBBADGES-2)
+                console.log('durée : ' + elapsed);           
             if (err) {
             throw err;
             }
@@ -134,9 +141,10 @@ function time(func, namefunc){
     console.log('durée : ' + elapsed);
 }
   
-time(createDatabase(), 'createDatabase');
+createDatabase();
 
-time(queryLookup(), 'queryLookup');
+
+//time(queryLookup(), 'queryLookup');
 
 // http://www.sebastianseilund.com/nodejs-async-in-practice
 // pour le synchrone
