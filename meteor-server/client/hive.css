@@ -60,3 +60,7 @@ body {
 .inc {
   cursor: pointer;
 }
+
+.player_details .id{
+    font-size: 10pt;
+}

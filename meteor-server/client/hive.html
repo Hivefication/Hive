@@ -19,6 +19,7 @@
   <div class="details">
     <div class="name">{{selected_name}}</div>
     <input type="button" class="inc" value="Give 5 points" />
+    {{> player_details}}
   </div>
   {{/if}}
 
@@ -31,6 +32,37 @@
   <div class="player {{selected}}">
     <span class="name">{{name}}</span>
     <span class="score">{{score}}</span>
+  </div>
+</template>
+
+<template name="player_details">
+  <div class="player_details">
+    <span class="score">{{score}}</span>
+    <span class="badges">
+      {{#each badges}}
+        {{> badge}}
+      {{/each}}
+    </span>
+    <span class="events">
+      {{#each eventlist}}
+        {{> eventitem}}
+      {{/each}}
+    </span>    
+  </div>
+</template>
+
+<template name="badge">
+  <div class="badge">
+    <span class="badge name">{{name}}</span>
+    <span class="badge img">{{img}}</span>
+  </div>
+</template>
+
+<template name="eventitem">
+  <div class="player_event">
+    <span class="date">{{datetime}}</span>
+    <span class="type">{{eventtype.name}}</span>
+    <spna class="args">{{args}}</span>
   </div>
 </template>
 
