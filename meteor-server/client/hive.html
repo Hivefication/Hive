@@ -1,36 +1,93 @@
 <head>
-  <title>Leaderboard</title>
+  <title>Hive</title>
 </head>
 
 <body>
-  <div id="outer">
-    {{> leaderboard}}
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand" href="#">Hive</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span3">
+        <div class="well sidebar-nav">
+          <ul class="nav nav-list">
+            {{> playerboard}}
+          </ul>
+        </div>
+      </div>
+      <div class="span9">
+        {{> player_details}}
+      </div>
+    </div>
+    <footer>
+    </footer>
   </div>
 </body>
 
-<template name="leaderboard">
-  <div class="leaderboard">
-    {{#each players}}
-      {{> player}}
-    {{/each}}
-  </div>
-
-  {{#if selected_name}}
-  <div class="details">
-    <div class="name">{{selected_name}}</div>
-    <input type="button" class="inc" value="Give 5 points" />
-  </div>
-  {{/if}}
-
-  {{#unless selected_name}}
-  <div class="none">Click a player to select</div>
-  {{/unless}}
+<template name="playerboard">
+  <li class="nav-header">Players</li>
+  {{#each players}}
+    {{> player}}
+  {{/each}}
 </template>
 
 <template name="player">
-  <div class="player {{selected}}">
-    <span class="name">{{name}}</span>
-    <span class="score">{{score}}</span>
+  <li class="player {{selected}}">
+    <a><i class="icon-user"></i>{{name}}<span class="score">{{score}}</span></a>
+  </li>
+</template>
+
+<template name="player_details">
+
+  {{#if selected_name}}
+    <div class="hero-unit player-details">
+      <h1>
+        {{selected_name}}
+        <a class="btn btn-primary btn-large inc">
+          Give 5 points !
+        </a>
+      </h1>
+      <p class="label label-info"><i class="icon-star icon-white"></i> {{score}} {{pluralize score 'point' 'points'}}</p>
+      <p class="label label-info"><i class="icon-certificate icon-white"></i> {{num_badges}} {{pluralize num_badges 'badge' 'badges'}}</p>
+      <h3>Badges</h3>
+      <div class="badges">
+        {{#each badges}}
+          {{> badge}}
+        {{else}}
+          <p class="muted">{{selected_name}} has not already earned any badges</p>
+        {{/each}}
+      </div>
+      <h3>Events</h3>
+      <div class="events">
+        {{#each events}}
+          {{> event}}
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
+
+  {{#unless selected_name}}
+    <div class="alert alert-info"><strong>Heads up! </strong>Click a player on the list to display informations</div>
+  {{/unless}}
+</template>
+
+<template name="badge">
+  <div class="badge">
+    <span class="badge name">{{name}}</span>
+    <span class="badge img">{{img}}</span>
+  </div>
+</template>
+
+<template name="event">
+  <div class="event">
+    <span class="date">{{datetime}}</span>
+    <span class="type">{{eventtype.name}}</span>
+    <spna class="args">{{args}}</span>
   </div>
 </template>
 

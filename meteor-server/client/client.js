@@ -1,26 +1,69 @@
-Players = new Meteor.Collection("players");
+// http://there4development.com/blog/2012/07/29/handlebars-helpers-for-debugging-and-pluralization/
+Handlebars.registerHelper('pluralize', function(number, single, plural) {
+  return (number <= 1) ? single : plural;
+});
 
-Template.leaderboard.players = function () {
-    return Players.find({}, {sort: {score: -1, name: 1}});
-  };
 
-  Template.leaderboard.selected_name = function () {
-    var player = Players.findOne(Session.get("selected_player"));
-    return player && player.name;
-  };
+Template.playerboard.players = function () {
+  return Players.find({}, {sort: {score: -1, name: 1}});
+};
 
-  Template.player.selected = function () {
-    return Session.equals("selected_player", this._id) ? "selected" : '';
-  };
 
-  Template.leaderboard.events({
-    'click input.inc': function () {
-      Players.update(Session.get("selected_player"), {$inc: {score: 5}});
+Template.player.events({
+  'click': function () {
+    Session.set('selected_player', this._id);
+  }
+}); 
+
+Template.player.selected = function () {
+  return Session.equals('selected_player', this._id) ? 'active' : '';
+};
+
+
+Template.player_details.events({
+  'click .inc': function () {
+    Players.update(Session.get("selected_player"), { $inc: {score: 5} });
+  }
+});
+
+Template.player_details.selected_name = function () {
+  var player = Players.findOne(Session.get("selected_player"));
+  return player && player.name;
+};
+
+Template.player_details.num_badges = function () {
+  return Players.findOne({_id:Session.get('selected_player')}).badges.length;
+}
+
+Template.player_details.badges = function () {
+  return Players.findOne({_id:Session.get('selected_player')}).badges;
+}
+
+Template.player_details.score = function () {
+  return Players.findOne({_id:Session.get('selected_player')}).score;
+}
+
+Template.player_details.events = function() {
+  var events = Players.findOne({_id:Session.get("selected_player")}).events;
+
+  for (var i in events){
+    if (events[i].eventTypeId){
+      events[i].eventtype = EventTypes.findOne({_id:events[i].eventTypeId});
     }
-  });
-
-  Template.player.events({
-    'click': function () {
-      Session.set("selected_player", this._id);
+    else{
+      events[i].eventtype = {
+        name: "Missing Event Type"
+      }
     }
-  }); 
+  }
+  
+  return events
+}
+
+
+
+
+  
+
+  
+  
