@@ -42,19 +42,15 @@ Template.player_details.selected_name = function () {
   return player && player.name;
 };
 
-Template.player_details.num_badges = function () {
-  return Players.findOne({ _id: Session.get('selected_player') }).badges.length;
-};
-
-Template.player_details.badges = function () {
+Template.player_details.player_badges = function () {
   return Players.findOne({ _id: Session.get('selected_player') }).badges;
 };
 
-Template.player_details.score = function () {
+Template.player_details.player_score = function () {
   return Players.findOne({ _id: Session.get('selected_player') }).score;
 };
 
-Template.player_details.events = function() {
+Template.player_details.player_events = function() {
   return Players.findOne({ _id: Session.get("selected_player") }).events;
 };
 
