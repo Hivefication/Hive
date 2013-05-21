@@ -12,15 +12,17 @@ var surnames = new Array("joel", "greg", "jorge", "nicolas", "patrick", "guillau
 
 var names = new Array("ducommun", "cavat", "alvalejo", "aubert", "rensch", "taillard", "beauvert", "gavillet", "monachon", "constantin", "blocher", "paul II", "von beethoven", "mozart", "rossini", "bach", "tchaikovski", "vivaldi");
 
-var NBUSERS  = 1000;
-var NBBADGES = 100;
+var NBUSERS  = 10000;
+var NBBADGES = 1000;
 var NBBADGESMAX = 10;
-var elapsed;
+var elapsed, from;
 
 connection.connect();
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // Creation tables
+
+
 function createDatabase(callback){
     connection.query('DROP TABLE IF EXISTS T_BadgeUser;', function(err, rows, fields) {
         if (err) {
@@ -38,7 +40,6 @@ function createDatabase(callback){
         throw err;
         }
     });
-
 
 
     var create = new Array();
@@ -75,10 +76,21 @@ function createDatabase(callback){
         ON DELETE NO ACTION \
         ON UPDATE NO ACTION) \
     ENGINE = InnoDB;';
-
-    for(var i = 0; i < create.length; i++){
+    
+    for(var i = 0; i < create.length-1; i++){
         connection.query(create[i]);
     };
+    
+    connection.query(create[create.length-1], callback);
+}
+    
+    
+    
+function peupleDatabase(callback){
+
+
+
+
 
     for(var i = 0; i < NBBADGES; i++){
         var name = 'badge ' + i;
@@ -102,14 +114,15 @@ function createDatabase(callback){
 }
 
 
-function queryLookup(callback){
-    connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE U.idUser = 23 ', function(err, rows, fields) {
-      if (err) throw err;
+function queryLookup1(callback){
+    connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE U.idUser = 23 ');
+    
+    connection.query('SELECT 1 + 1', callback);
+    
+}
 
-      for (var i = 0; i < rows.length; i++)
-        console.log(rows[i].nameUser + ' ' + rows[i].surname + ' ' + rows[i].namebadge);
-        
-    });
+function queryLookup1(callback){
+    connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE B.idBadge = 23 ');
     
     connection.query('SELECT 1 + 1', callback);
     
@@ -121,13 +134,8 @@ function queryLookup(callback){
 async.series([
     function(callback){
         console.log('start create database');
-        var from = new Date();
-        createDatabase(callback);
-    },
-    function(callback){
-        console.log('start lookup');
-        var from = new Date();
-        queryLookup(callback);
+        from = new Date();
+        createDatabase(callback); // createDatabase ou queryLookup1
     }
 ],
 function(err, rows, fields){
