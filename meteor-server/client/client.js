@@ -1,3 +1,8 @@
+// http://there4development.com/blog/2012/07/29/handlebars-helpers-for-debugging-and-pluralization/
+Handlebars.registerHelper('pluralize', function(number, single, plural) {
+  return (number <= 1) ? single : plural;
+});
+
 
 Template.playerboard.players = function () {
   return Players.find({}, {sort: {score: -1, name: 1}});
@@ -38,27 +43,27 @@ Template.player_details.score = function () {
   return Players.findOne({_id:Session.get('selected_player')}).score;
 }
 
+Template.player_details.events = function() {
+  var events = Players.findOne({_id:Session.get("selected_player")}).events;
 
-
-
-
-
-  
-
-  
-  Template.player_details.eventlist = function(){
-    var events = Players.findOne({_id:Session.get("selected_player")}).events;
-
-    for (var i in events){
-      if (events[i].eventTypeId){
-        events[i].eventtype = EventTypes.findOne({_id:events[i].eventTypeId});
-      }
-      else{
-        events[i].eventtype = {
-          name: "Missing Event Type"
-        }
+  for (var i in events){
+    if (events[i].eventTypeId){
+      events[i].eventtype = EventTypes.findOne({_id:events[i].eventTypeId});
+    }
+    else{
+      events[i].eventtype = {
+        name: "Missing Event Type"
       }
     }
-    
-    return events
   }
+  
+  return events
+}
+
+
+
+
+  
+
+  
+  

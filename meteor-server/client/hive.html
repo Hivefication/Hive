@@ -52,18 +52,20 @@
           Give 5 points !
         </a>
       </h1>
-      <p class="label label-info"><i class="icon-star icon-white"></i> {{score}} point(s)</p>
-      <p class="label label-info"><i class="icon-certificate icon-white"></i> {{num_badges}} badge(s)</p>
+      <p class="label label-info"><i class="icon-star icon-white"></i> {{score}} {{pluralize score 'point' 'points'}}</p>
+      <p class="label label-info"><i class="icon-certificate icon-white"></i> {{num_badges}} {{pluralize num_badges 'badge' 'badges'}}</p>
       <h3>Badges</h3>
       <div class="badges">
         {{#each badges}}
           {{> badge}}
+        {{else}}
+          <p class="muted">{{selected_name}} has not already earned any badges</p>
         {{/each}}
       </div>
       <h3>Events</h3>
       <div class="events">
-        {{#each eventlist}}
-          {{> eventitem}}
+        {{#each events}}
+          {{> event}}
         {{/each}}
       </div>
     </div>
@@ -74,8 +76,6 @@
   {{/unless}}
 </template>
 
-
-
 <template name="badge">
   <div class="badge">
     <span class="badge name">{{name}}</span>
@@ -83,8 +83,8 @@
   </div>
 </template>
 
-<template name="eventitem">
-  <div class="player_event">
+<template name="event">
+  <div class="event">
     <span class="date">{{datetime}}</span>
     <span class="type">{{eventtype.name}}</span>
     <spna class="args">{{args}}</span>
