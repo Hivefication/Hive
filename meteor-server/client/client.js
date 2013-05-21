@@ -16,7 +16,7 @@ Handlebars.registerHelper('date', function (date) {
 
 
 Template.playerboard.players = function () {
-  return Players.find({}, {sort: {score: -1, name: 1}});
+  return Players.find({}, { sort: { score: -1, name: 1 } });
 };
 
 
@@ -33,7 +33,7 @@ Template.player.selected = function () {
 
 Template.player_details.events({
   'click .inc': function () {
-    Players.update(Session.get("selected_player"), { $inc: {score: 5} });
+    Players.update(Session.get("selected_player"), { $inc: { score: 5 } });
   }
 });
 
@@ -43,36 +43,28 @@ Template.player_details.selected_name = function () {
 };
 
 Template.player_details.num_badges = function () {
-  return Players.findOne({_id:Session.get('selected_player')}).badges.length;
-}
+  return Players.findOne({ _id: Session.get('selected_player') }).badges.length;
+};
 
 Template.player_details.badges = function () {
-  return Players.findOne({_id:Session.get('selected_player')}).badges;
-}
+  return Players.findOne({ _id: Session.get('selected_player') }).badges;
+};
 
 Template.player_details.score = function () {
-  return Players.findOne({_id:Session.get('selected_player')}).score;
-}
+  return Players.findOne({ _id: Session.get('selected_player') }).score;
+};
 
 Template.player_details.events = function() {
-  var events = Players.findOne({_id:Session.get("selected_player")}).events;
+  return Players.findOne({ _id: Session.get("selected_player") }).events;
+};
 
-  for (var i in events){
-    if (events[i].eventTypeId){
-      events[i].eventtype = EventTypes.findOne({_id:events[i].eventTypeId});
-    }
-    else{
-      events[i].eventtype = {
-        name: "Missing Event Type"
-      }
-    }
-  }
-  
-  return events
-}
 
-Template.event.rendered = function() {
+Template.event.rendered = function () {
   jQuery(this.find('.event-date')).tooltip();
+};
+
+Template.event.event_name = function () {
+  return EventTypes.findOne({ _id: this.eventTypeId }).name;
 };
 
 
