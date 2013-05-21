@@ -81,16 +81,17 @@ function createDatabase(callback){
         connection.query(create[i]);
     };
     
-    connection.query(create[create.length-1], callback);
+    connection.query(create[create.length-1], function(err, rows, fields){
+      elapsed = new Date()
+      var diff = elapsed.getTime() - from.getTime();
+      console.log('durée : ' + diff);
+      callback();
+    });
 }
     
     
     
 function peupleDatabase(callback){
-
-
-
-
 
     for(var i = 0; i < NBBADGES; i++){
         var name = 'badge ' + i;
@@ -109,7 +110,12 @@ function peupleDatabase(callback){
         }
     }
     
-    connection.query('SELECT 1 + 1', callback);
+    connection.query('SELECT 1 + 1', function(err, rows, fields){
+      elapsed = new Date()
+      var diff = elapsed.getTime() - from.getTime();
+      console.log('durée : ' + diff);
+      callback();
+    });
        
 }
 
@@ -117,16 +123,26 @@ function peupleDatabase(callback){
 function queryLookup1(callback){
     connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE U.idUser = 23 ');
     
-    connection.query('SELECT 1 + 1', callback);
+    connection.query('SELECT 1 + 1', function(err, rows, fields){
+      elapsed = new Date()
+      var diff = elapsed.getTime() - from.getTime();
+      console.log('durée : ' + diff);
+      callback();
+    });
     
 }
 
-function queryLookup1(callback){
-    connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE B.idBadge = 23 ');
+// function queryLookup1(callback){
+//     connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE B.idBadge = 23 ');
     
-    connection.query('SELECT 1 + 1', callback);
+//     connection.query('SELECT 1 + 1', function(err, rows, fields){
+//       elapsed = new Date()
+//       var diff = elapsed.getTime() - from.getTime();
+//       console.log('durée : ' + diff);
+//       callback();
+//     });
     
-}
+// }
 
 
 
@@ -136,13 +152,21 @@ async.series([
         console.log('start create database');
         from = new Date();
         createDatabase(callback); // createDatabase ou queryLookup1
+    },
+    function(callback){
+        console.log('start populate database');
+        from = new Date();
+        peupleDatabase(callback); // createDatabase ou queryLookup1
+    },
+    function(callback){
+        console.log('start lookup database');
+        from = new Date();
+        queryLookup1(callback); // createDatabase ou queryLookup1
     }
 ],
-function(err, rows, fields){
-    elapsed = new Date()
-    var diff = elapsed.getTime() - from.getTime();
-    console.log('durée : ' + diff);
-    
+function(err){
+    console.log('Finish');
+    connection.end();
 });
 
 
@@ -154,7 +178,6 @@ function(err, rows, fields){
 // http://www.sebastianseilund.com/nodejs-async-in-practice
 // pour le synchrone
 
-connection.end();
 
 
 
