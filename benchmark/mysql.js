@@ -15,6 +15,7 @@ var names = new Array("ducommun", "cavat", "alvalejo", "aubert", "rensch", "tail
 var NBUSERS  = 1000;
 var NBBADGES = 100;
 var NBBADGESMAX = 10;
+var elapsed;
 
 connection.connect();
 
@@ -97,7 +98,7 @@ function createDatabase(callback){
     }
     
     connection.query('SELECT 1 + 1', callback);
-    //callback();
+       
 }
 
 
@@ -111,27 +112,29 @@ function queryLookup(callback){
     });
     
     connection.query('SELECT 1 + 1', callback);
+    
 }
 
 
 
-var from, elapsed;
+
 async.series([
     function(callback){
         console.log('start create database');
-        from = new Date();
+        var from = new Date();
         createDatabase(callback);
     },
     function(callback){
         console.log('start lookup');
-        from = new Date();
+        var from = new Date();
         queryLookup(callback);
     }
 ],
 function(err, rows, fields){
     elapsed = new Date()
     var diff = elapsed.getTime() - from.getTime();
-    console.log('durée create database : ' + diff);
+    console.log('durée : ' + diff);
+    
 });
 
 
