@@ -1,6 +1,17 @@
 // http://there4development.com/blog/2012/07/29/handlebars-helpers-for-debugging-and-pluralization/
-Handlebars.registerHelper('pluralize', function(number, single, plural) {
+// usage: {{pluralize collection.length 'quiz' 'quizzes'}}
+Handlebars.registerHelper('pluralize', function (number, single, plural) {
   return (number <= 1) ? single : plural;
+});
+
+// usage: {{fromNow date}}
+Handlebars.registerHelper('fromNow', function (date) {
+  return moment(date).fromNow();
+});
+
+// usage: {{date date}}
+Handlebars.registerHelper('date', function (date) {
+  return moment(date).format('MMMM Do YYYY, h:mm:ss a');
 });
 
 
@@ -59,6 +70,10 @@ Template.player_details.events = function() {
   
   return events
 }
+
+Template.event.rendered = function() {
+  jQuery(this.find('.event-date')).tooltip();
+};
 
 
 

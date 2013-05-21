@@ -66,6 +66,8 @@
       <div class="events">
         {{#each events}}
           {{> event}}
+        {{else}}
+          <p class="muted">{{selected_name}} event history is empty</p>
         {{/each}}
       </div>
     </div>
@@ -78,16 +80,16 @@
 
 <template name="badge">
   <div class="badge">
-    <span class="badge name">{{name}}</span>
-    <span class="badge img">{{img}}</span>
+    <span>{{name}}</span>
+    <span>{{img}}</span>
   </div>
 </template>
 
 <template name="event">
-  <div class="event">
-    <span class="date">{{datetime}}</span>
-    <span class="type">{{eventtype.name}}</span>
-    <spna class="args">{{args}}</span>
-  </div>
+  <p class="event">
+    <i class="icon-bell"> </i>
+    <span>{{eventtype.name}}</span>
+    <small class="muted event-date" title="{{date datetime}}">{{fromNow datetime}}</small>
+  </p>
 </template>
 
