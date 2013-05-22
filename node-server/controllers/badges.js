@@ -62,13 +62,17 @@ exports.remove = function (req, res) {
 exports.icon = function(req, res) {
     var id = req.params.id;
     
-    //6b18f524507f76cd2f44a929a65135f4
-    
     model.findById(id, function(err, item) {
-       var img = fs.readFileSync('./img/'+item.icon);
-       //var img = fs.readFileSync('./img/01.png');
-       res.writeHead(200, {'Content-Type': 'image/png' });
-       res.end(img, 'binary');
+       var img = fs.readFile('./img/'+item.icon,"binary",function(error,file){
+          if(error) {
+            res.writeHead(500, {"Content-Type": "text/plain"});
+            res.write(error + "\n");
+            res.end();
+          } else {      
+            res.writeHead(200, {"Content-Type": "image/png"});
+            res.end(file,"binary");
+          }
+       });
     });
 };
 
