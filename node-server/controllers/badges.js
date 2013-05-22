@@ -1,4 +1,5 @@
 var model = require('../models/badge');
+var fs = require('fs');
 
 exports.list = function (req, res) {
     model.findAll(function(err, items) {
@@ -58,6 +59,19 @@ exports.remove = function (req, res) {
     });
 };
 
+exports.icon = function(req, res) {
+    var id = req.params.id;
+    
+    //6b18f524507f76cd2f44a929a65135f4
+    
+    model.findById(id, function(err, item) {
+       var img = fs.readFileSync('./img/'+item.icon);
+       //var img = fs.readFileSync('./img/01.png');
+       res.writeHead(200, {'Content-Type': 'image/png' });
+       res.end(img, 'binary');
+    });
+};
+
 exports.routes = [
     // Badges administration
     {
@@ -83,4 +97,8 @@ exports.routes = [
         'path': '/badges/:id',
         'route': exports.remove
     },
+    {
+        'path': '/badges/:id/icon',
+        'route': exports.icon
+    }
 ];
