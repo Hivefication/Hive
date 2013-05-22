@@ -62,11 +62,3 @@ Template.event.rendered = function () {
 Template.event.event_name = function () {
   return EventTypes.findOne({ _id: this.eventTypeId }).name;
 };
-
-
-
-
-  
-
-  
-  
