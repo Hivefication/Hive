@@ -8,6 +8,7 @@ var names = new Array("ducommun", "cavat", "albaladejo", "aubert", "rensch", "ta
 var NBUSERS  = 100;
 var NBBADGES = 25;
 var NBBADGESMAX = 5;
+var NBREPETITION = 50;
 
 var elapsed, from;
 
@@ -164,16 +165,27 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 		}
 	}
 
-	// function queryLookup2(callback){
-	// 	var stream = Users.find({name:}).stream();
-	// 	stream.on("data", function(item) {});
-	// 	stream.on("end", function(){
-	//       elapsed = new Date()
-	//       var diff = elapsed.getTime() - from.getTime();
-	//       console.log('durée : ' + diff);
-	//       callback();
-	//     });
-	// }
+	function queryLookup3(callback){
+
+		var current = 0;
+		var total = NBREPETITION;
+		function verifEnd(){
+			current++;
+			if(current >= total){
+				elapsed = new Date()
+				var diff = elapsed.getTime() - from.getTime();
+				console.log('durée : ' + diff);
+				callback();
+			}
+		}
+		for(var i = 0; i < NBREPETITION; i++){
+			var stream = Users.find().stream();
+			stream.on("data", function(item) {});
+			stream.on("end", function(){
+				verifEnd();
+		    });
+		}
+	}
 
 	async.series([
 	    function(callback){
@@ -192,7 +204,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	        populateDatabase(callback);
 	    },
 	    function(callback){
-	        console.log('start lookup all users with their badges');
+	        console.log('start lookup all users one by one with their badges');
 	        from = new Date();
 	        queryLookup1(callback);
 	    },
@@ -200,6 +212,11 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	        console.log('start lookup all badges without join');
 	        from = new Date();
 	        queryLookup2(callback);
+	    },
+	    function(callback){
+	        console.log('start lookup all entries with join');
+	        from = new Date();
+	        queryLookup3(callback);
 	    }
 	],
 	function(err){

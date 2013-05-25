@@ -17,6 +17,8 @@ var NBBADGES = 25;
 var NBBADGESMAX = 5;
 var elapsed, from;
 
+var NBREPETITION = 50;
+
 connection.connect();
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -149,6 +151,20 @@ function queryLookup2(callback){
     });
 }
 
+function queryLookup3(callback){
+
+    for(var i = 0; i < NBREPETITION; i++){
+      connection.query('SELECT * FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge');
+    }
+
+    connection.query('SELECT 1 + 1', function(err, rows, fields){
+      elapsed = new Date()
+      var diff = elapsed.getTime() - from.getTime();
+      console.log('durée : ' + diff);
+      callback();
+    });
+}
+
 // function queryLookup1(callback){
 //     connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE B.idBadge = 23 ');
     
@@ -168,22 +184,27 @@ async.series([
     function(callback){
         console.log('start create database');
         from = new Date();
-        createDatabase(callback); // createDatabase ou queryLookup1
+        createDatabase(callback);
     },
     function(callback){
         console.log('start populate database');
         from = new Date();
-        peupleDatabase(callback); // createDatabase ou queryLookup1
+        peupleDatabase(callback);
     },
     function(callback){
-        console.log('start lookup all users with their badges');
+        console.log('start lookup all users one by one with their badges');
         from = new Date();
-        queryLookup1(callback); // createDatabase ou queryLookup1
+        queryLookup1(callback);
     },
     function(callback){
         console.log('start lookup all badges without join');
         from = new Date();
-        queryLookup2(callback); // createDatabase ou queryLookup1
+        queryLookup2(callback);
+    },
+    function(callback){
+        console.log('start lookup all entries with join');
+        from = new Date();
+        queryLookup3(callback);
     }
 ],
 function(err){
