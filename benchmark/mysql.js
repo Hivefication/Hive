@@ -12,9 +12,9 @@ var surnames = new Array("joel", "greg", "jorge", "nicolas", "patrick", "guillau
 
 var names = new Array("ducommun", "cavat", "alvalejo", "aubert", "rensch", "taillard", "beauvert", "gavillet", "monachon", "constantin", "blocher", "paul II", "von beethoven", "mozart", "rossini", "bach", "tchaikovski", "vivaldi");
 
-var NBUSERS  = 10000;
-var NBBADGES = 1000;
-var NBBADGESMAX = 10;
+var NBUSERS  = 100;
+var NBBADGES = 25;
+var NBBADGESMAX = 5;
 var elapsed, from;
 
 connection.connect();
@@ -104,7 +104,8 @@ function peupleDatabase(callback){
         connection.query('INSERT INTO T_User (idUser, name, surname) values (\"'+(i+1)+'\",\"'+name+'\",\"'+surname+'\");');
         
         var no = 0;
-        for(var j = 0; j<Math.floor((Math.random()*NBBADGESMAX)+1); j++){
+        for(var j = 0; j< NBBADGESMAX; j++){
+            // pas plus simple de faire un random sur tout les id des badges ? Math.random()*NBBADGES
             no += Math.floor((Math.random()*NBBADGESMAX)+1);
             connection.query('INSERT INTO T_BadgeUser (idUser, idBadge) values (\"'+(i+1)+'\",\"'+no+'\");');
         }
@@ -121,15 +122,31 @@ function peupleDatabase(callback){
 
 
 function queryLookup1(callback){
-    connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE U.idUser = 23 ');
-    
+
+    for(var i = 0; i < NBUSERS; i++){
+      connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE U.idUser = ' + i);
+    }
+
     connection.query('SELECT 1 + 1', function(err, rows, fields){
       elapsed = new Date()
       var diff = elapsed.getTime() - from.getTime();
       console.log('durée : ' + diff);
       callback();
     });
-    
+}
+
+function queryLookup2(callback){
+
+    for(var i = 0; i < NBBADGES; i++){
+      connection.query('SELECT * FROM T_Badge B WHERE idBadge = ' + i);
+    }
+
+    connection.query('SELECT 1 + 1', function(err, rows, fields){
+      elapsed = new Date()
+      var diff = elapsed.getTime() - from.getTime();
+      console.log('durée : ' + diff);
+      callback();
+    });
 }
 
 // function queryLookup1(callback){
@@ -159,9 +176,14 @@ async.series([
         peupleDatabase(callback); // createDatabase ou queryLookup1
     },
     function(callback){
-        console.log('start lookup database');
+        console.log('start lookup all users with their badges');
         from = new Date();
         queryLookup1(callback); // createDatabase ou queryLookup1
+    },
+    function(callback){
+        console.log('start lookup all badges without join');
+        from = new Date();
+        queryLookup2(callback); // createDatabase ou queryLookup1
     }
 ],
 function(err){

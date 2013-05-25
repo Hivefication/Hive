@@ -1,12 +1,15 @@
 var Mongo = require('mongodb').MongoClient;
+var async = require('async');
 
 var surnames = new Array("joel", "greg", "jorge", "nicolas", "patrick", "guillaume", "naim", "stephane", "jonas", "delphine", "marie", "catherine", "fany", "jeanne", "jean", "lulu", "robert", "fabrice", "monica", "david");
 
 var names = new Array("ducommun", "cavat", "albaladejo", "aubert", "rensch", "taillard", "beauvert", "gavillet", "monachon", "constantin", "blocher", "paul II", "von beethoven", "mozart", "rossini", "bach", "tchaikovski", "vivaldi");
 
-var NBUSERS  = 1000;
-var NBBADGES = 100;
-var NBBADGESMAX = 10;
+var NBUSERS  = 100;
+var NBBADGES = 25;
+var NBBADGESMAX = 5;
+
+var elapsed, from;
 
 var userNames = new Array();
 var userSurnames = new Array();
@@ -18,34 +21,189 @@ for(var i = 0; i < NBUSERS; i++){
 Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	
 	if(err) { 
-		return console.dir(err);
+		return console.log(err);
 	}
 
-	var Users = db.createCollection('Users', function(err, collection) {});
-	var Badges = db.createCollection('Badges', function(err, collection) {});
 
-	Users.remove();
-	Badges.remove();
+	var Users;
+	var Badges;
 
-	for(var i = 0; i < NBBADGES; i++){
-		var name = 'badge ' + i;
-		Badges.insert({'name':name}, {w:1}, function(err, result) { });
-	}
+	function createDatabase(callback){
 
-	for(var i = 0; i < NBUSERS; i++){
-		Users.insert({'name':userNames[i], 'surname':userSurnames[i]}, {w:1}, function(err, result){
-			if (err){
+		var current = 0;
+		var total = 2;
+		function verifEnd(){
+			current++;
+			if(current >= total){
+				elapsed = new Date()
+				var diff = elapsed.getTime() - from.getTime();
+				console.log('durée : ' + diff);
+				callback();
+			}
+		}
+
+		db.createCollection('Users', function(err, collection) { 
+			if (err) 
 				console.log(err);
-			}
-			else{}
-				for(var j = 0; j<Math.floor((Math.random()*NBBADGESMAX)+1); j++){
-					var name = 'badge ' + j;
-					Users.update({_id:result._id}, {$push:{badges:{'name':name}}}, {w:1}, function(err, result) {});
-				}
-			}
+			else
+				Users = collection;
+
+			verifEnd();
 		});
-		
+		db.createCollection('Badges', function(err, collection) {
+			if (err) 
+				console.log(err);
+			else
+				Badges = collection;
+
+			verifEnd();
+		});
 	}
 
-	// Select query
+	function deleteData(callback){
+
+		var current = 0;
+		var total = 2;
+		function verifEnd(){
+			current++;
+			if(current >= total){
+				elapsed = new Date()
+				var diff = elapsed.getTime() - from.getTime();
+				console.log('durée : ' + diff);
+				callback();
+			}
+		}
+
+		Users.remove(function(err){
+			verifEnd();
+		});
+		Badges.remove(function(err){
+			verifEnd();
+		});
+	}
+
+	function populateDatabase(callback){
+
+		var current = 0;
+		var total = NBBADGES + NBUSERS + NBUSERS * NBBADGESMAX;
+		function verifEnd(){
+			current++;
+			if(current >= total){
+				elapsed = new Date()
+				var diff = elapsed.getTime() - from.getTime();
+				console.log('durée : ' + diff);
+				callback();
+			}
+		}
+
+		for(var i = 0; i < NBBADGES; i++){
+			var name = 'badge ' + i;
+			Badges.insert({'idbadge':i, 'name':name}, {w:1}, function(err, result) { 
+				verifEnd();
+			});
+		}
+
+		for(var i = 0; i < NBUSERS; i++){
+			Users.insert({idkey:i, name:userNames[i], surname:userSurnames[i], badges:[]}, {w:1}, function(err, result){
+				verifEnd();
+				if (err){
+					console.log(err);
+				}
+				else{
+					for(var j = 0; j<NBBADGESMAX; j++){
+						var badge_id = Math.floor(Math.random()*NBBADGES);
+						var badge_name = 'badge ' + badge_id;
+						Users.update({idkey:result[0].idkey}, {$push:{badges:{idbadge:badge_id, name:badge_name}}}, {w:1}, function(err, result) {
+							verifEnd();
+						});
+					}
+				}
+			});
+		}
+	}
+
+	function queryLookup1(callback){
+		
+		var current = 0;
+		var total = NBUSERS;
+		function verifEnd(){
+			current++;
+			if(current >= total){
+				elapsed = new Date()
+				var diff = elapsed.getTime() - from.getTime();
+				console.log('durée : ' + diff);
+				callback();
+			}
+		}
+
+		for(var i = 0; i < NBUSERS; i++){
+			Users.findOne({'idkey':i}, function(err, item) {
+				verifEnd();
+			});
+		}
+	}
+
+	function queryLookup2(callback){
+		
+		var current = 0;
+		var total = NBBADGES;
+		function verifEnd(){
+			current++;
+			if(current >= total){
+				elapsed = new Date()
+				var diff = elapsed.getTime() - from.getTime();
+				console.log('durée : ' + diff);
+				callback();
+			}
+		}
+
+		for(var i = 0; i < NBBADGES; i++){
+			Users.findOne({'idbadge':i}, function(err, item) {
+				verifEnd();
+			});
+		}
+	}
+
+	// function queryLookup2(callback){
+	// 	var stream = Users.find({name:}).stream();
+	// 	stream.on("data", function(item) {});
+	// 	stream.on("end", function(){
+	//       elapsed = new Date()
+	//       var diff = elapsed.getTime() - from.getTime();
+	//       console.log('durée : ' + diff);
+	//       callback();
+	//     });
+	// }
+
+	async.series([
+	    function(callback){
+	        console.log('start create database');
+	        from = new Date();
+	        createDatabase(callback);
+	    },
+	    function(callback){
+	        console.log('start delete existing data');
+	        from = new Date();
+	        deleteData(callback);
+	    },
+	    function(callback){
+	        console.log('start populate database');
+	        from = new Date();
+	        populateDatabase(callback);
+	    },
+	    function(callback){
+	        console.log('start lookup all users with their badges');
+	        from = new Date();
+	        queryLookup1(callback);
+	    },
+	    function(callback){
+	        console.log('start lookup all badges without join');
+	        from = new Date();
+	        queryLookup2(callback);
+	    }
+	],
+	function(err){
+	    console.log('Finish');
+	});
+
 });
