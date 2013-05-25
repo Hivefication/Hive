@@ -15,8 +15,8 @@ var elapsed, from;
 var userNames = new Array();
 var userSurnames = new Array();
 for(var i = 0; i < NBUSERS; i++){
-	userNames[i] = names[Math.floor((Math.random()*names.length)+1)];
-	userSurnames[i] = surnames[Math.floor((Math.random()*surnames.length)+1)];
+	userNames[i] = names[Math.floor((Math.random()*names.length))];
+	userSurnames[i] = surnames[Math.floor((Math.random()*surnames.length))];
 }
 
 Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
@@ -159,7 +159,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 		}
 
 		for(var i = 0; i < NBBADGES; i++){
-			Users.findOne({'idbadge':i}, function(err, item) {
+			Badges.findOne({'idbadge':i}, function(err, item) {
 				verifEnd();
 			});
 		}
@@ -180,6 +180,28 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 		}
 		for(var i = 0; i < NBREPETITION; i++){
 			var stream = Users.find().stream();
+			stream.on("data", function(item) {});
+			stream.on("end", function(){
+				verifEnd();
+		    });
+		}
+	}
+
+	function queryLookup4(callback){
+
+		var current = 0;
+		var total = NBBADGES;
+		function verifEnd(){
+			current++;
+			if(current >= total){
+				elapsed = new Date()
+				var diff = elapsed.getTime() - from.getTime();
+				console.log('durée : ' + diff);
+				callback();
+			}
+		}
+		for(var i = 0; i < NBBADGES; i++){
+			var stream = Users.find({badges : {$elemMatch: {idbadge:i}}}).stream();
 			stream.on("data", function(item) {});
 			stream.on("end", function(){
 				verifEnd();
@@ -217,6 +239,11 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	        console.log('start lookup all entries with join');
 	        from = new Date();
 	        queryLookup3(callback);
+	    },
+	    function(callback){
+	        console.log('start lookup all user that have a badge id, use join');
+	        from = new Date();
+	        queryLookup4(callback);
 	    }
 	],
 	function(err){

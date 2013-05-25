@@ -165,6 +165,20 @@ function queryLookup3(callback){
     });
 }
 
+function queryLookup4(callback){
+
+    for(var i = 0; i < NBBADGES; i++){
+      connection.query('SELECT * FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser WHERE BU.idBadge = ' + i);
+    }
+
+    connection.query('SELECT 1 + 1', function(err, rows, fields){
+      elapsed = new Date()
+      var diff = elapsed.getTime() - from.getTime();
+      console.log('durée : ' + diff);
+      callback();
+    });
+}
+
 // function queryLookup1(callback){
 //     connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE B.idBadge = 23 ');
     
@@ -205,7 +219,12 @@ async.series([
         console.log('start lookup all entries with join');
         from = new Date();
         queryLookup3(callback);
-    }
+    },
+      function(callback){
+          console.log('start lookup all user that have a badge id, use join');
+          from = new Date();
+          queryLookup4(callback);
+      }
 ],
 function(err){
     console.log('Finish');
