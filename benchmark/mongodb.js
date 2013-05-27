@@ -5,9 +5,9 @@ var surnames = new Array("joel", "greg", "jorge", "nicolas", "patrick", "guillau
 
 var names = new Array("ducommun", "cavat", "albaladejo", "aubert", "rensch", "taillard", "beauvert", "gavillet", "monachon", "constantin", "blocher", "paul II", "von beethoven", "mozart", "rossini", "bach", "tchaikovski", "vivaldi");
 
-var NBUSERS  = 100;
-var NBBADGES = 25;
-var NBBADGESMAX = 5;
+var NBUSERS  = 10000;
+var NBBADGES = 1000;
+var NBBADGESMAX = 10;
 var NBREPETITION = 50;
 
 var elapsed, from;
@@ -105,19 +105,19 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 		}
 
 		for(var i = 0; i < NBUSERS; i++){
+		    
+		    var array = []
+		    
+		    for(var j = 0; j<NBBADGESMAX; j++){
+				var badge_id = Math.floor(Math.random()*NBBADGES);
+				var badge_name = 'badge ' + badge_id;
+				array.push({idbadge:id, })
+			}
+		    
 			Users.insert({idkey:i, name:userNames[i], surname:userSurnames[i], badges:[]}, {w:1}, function(err, result){
 				verifEnd();
 				if (err){
 					console.log(err);
-				}
-				else{
-					for(var j = 0; j<NBBADGESMAX; j++){
-						var badge_id = Math.floor(Math.random()*NBBADGES);
-						var badge_name = 'badge ' + badge_id;
-						Users.update({idkey:result[0].idkey}, {$push:{badges:{idbadge:badge_id, name:badge_name}}}, {w:1}, function(err, result) {
-							verifEnd();
-						});
-					}
 				}
 			});
 		}

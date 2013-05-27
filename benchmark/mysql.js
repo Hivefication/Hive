@@ -12,12 +12,13 @@ var surnames = new Array("joel", "greg", "jorge", "nicolas", "patrick", "guillau
 
 var names = new Array("ducommun", "cavat", "alvalejo", "aubert", "rensch", "taillard", "beauvert", "gavillet", "monachon", "constantin", "blocher", "paul II", "von beethoven", "mozart", "rossini", "bach", "tchaikovski", "vivaldi");
 
-var NBUSERS  = 100;
-var NBBADGES = 25;
-var NBBADGESMAX = 5;
+var NBUSERS  = 10000;
+var NBBADGES = 1000;
+var NBBADGESMAX = 10;
+var NBREPETITION = 50;
+
 var elapsed, from;
 
-var NBREPETITION = 50;
 
 connection.connect();
 
