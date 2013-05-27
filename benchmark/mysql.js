@@ -179,56 +179,80 @@ function queryLookup4(callback){
     });
 }
 
-// function queryLookup1(callback){
-//     connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE B.idBadge = 23 ');
-    
-//     connection.query('SELECT 1 + 1', function(err, rows, fields){
-//       elapsed = new Date()
-//       var diff = elapsed.getTime() - from.getTime();
-//       console.log('durée : ' + diff);
-//       callback();
-//     });
-    
-// }
+function queryLookup5(callback){
 
+    for(var i = 0; i < NBREPETITION; i++){
+      connection.query('SELECT U.surname, count(*) as countSurname FROM T_User U GROUP BY U.surname ORDER BY countSurname DESC');
+    }
 
+    connection.query('SELECT 1 + 1', function(err, rows, fields){
+      elapsed = new Date()
+      var diff = elapsed.getTime() - from.getTime();
+      console.log('durée : ' + diff);
+      callback();
+    });
+}
+
+function queryLookup6(callback){
+
+    for(var i = 0; i < NBBADGES; i++){
+      connection.query('SELECT U.name, count(*) as countBadges FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser WHERE BU.idBadge = ' + i + ' GROUP BY U.name ORDER BY countBadges DESC');
+    }
+
+    connection.query('SELECT 1 + 1', function(err, rows, fields){
+      elapsed = new Date()
+      var diff = elapsed.getTime() - from.getTime();
+      console.log('durée : ' + diff);
+      callback();
+    });
+}
 
 
 async.series([
-    function(callback){
-        console.log('start create database');
-        from = new Date();
-        createDatabase(callback);
-    },
-    function(callback){
-        console.log('start populate database');
-        from = new Date();
-        peupleDatabase(callback);
-    },
-    function(callback){
-        console.log('start lookup all users one by one with their badges');
-        from = new Date();
-        queryLookup1(callback);
-    },
-    function(callback){
-        console.log('start lookup all badges without join');
-        from = new Date();
-        queryLookup2(callback);
-    },
-    function(callback){
-        console.log('start lookup all entries with join');
-        from = new Date();
-        queryLookup3(callback);
-    },
-      function(callback){
-          console.log('start lookup all user that have a badge id, use join');
-          from = new Date();
-          queryLookup4(callback);
-      }
+  function(callback){
+    console.log('start create database');
+    from = new Date();
+    createDatabase(callback);
+  },
+  function(callback){
+    console.log('start populate database');
+    from = new Date();
+    peupleDatabase(callback);
+  },
+  function(callback){
+    console.log('start lookup all users one by one with their badges');
+    from = new Date();
+    queryLookup1(callback);
+  },
+  function(callback){
+    console.log('start lookup all badges without join');
+    from = new Date();
+    queryLookup2(callback);
+  },
+  function(callback){
+    console.log('start lookup all entries with join');
+    from = new Date();
+    queryLookup3(callback);
+  },
+  function(callback){
+    console.log('start lookup all user that have a badge id, use join');
+    from = new Date();
+    queryLookup4(callback);
+  },
+  function(callback){
+    console.log('start lookup with an aggregate that count the number of same surnames');
+    from = new Date();
+    queryLookup5(callback);
+  },
+  function(callback){
+    console.log('start lookup with an aggregate that count the number of same names with a given badge');
+    from = new Date();
+    queryLookup6(callback);
+  }
 ],
 function(err){
-    console.log('Finish');
-    connection.end();
+  console.log('Finish');
+  connection.end();
 });
 
 

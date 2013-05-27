@@ -137,7 +137,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 			}
 		}
 
-		for(var i = 0; i < NBUSERS; i++){
+		for(var i = 0; i < total; i++){
 			Users.findOne({'idkey':i}, function(err, item) {
 				verifEnd();
 			});
@@ -158,7 +158,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 			}
 		}
 
-		for(var i = 0; i < NBBADGES; i++){
+		for(var i = 0; i < total; i++){
 			Badges.findOne({'idbadge':i}, function(err, item) {
 				verifEnd();
 			});
@@ -178,7 +178,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 				callback();
 			}
 		}
-		for(var i = 0; i < NBREPETITION; i++){
+		for(var i = 0; i < total; i++){
 			var stream = Users.find().stream();
 			stream.on("data", function(item) {});
 			stream.on("end", function(){
@@ -200,12 +200,74 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 				callback();
 			}
 		}
-		for(var i = 0; i < NBBADGES; i++){
+		for(var i = 0; i < total; i++){
 			var stream = Users.find({badges : {$elemMatch: {idbadge:i}}}).stream();
 			stream.on("data", function(item) {});
 			stream.on("end", function(){
 				verifEnd();
 		    });
+		}
+	}
+
+	function queryLookup5(callback){
+
+		var current = 0;
+		var total = NBREPETITION;
+		function verifEnd(){
+			current++;
+			if(current >= total){
+				elapsed = new Date()
+				var diff = elapsed.getTime() - from.getTime();
+				console.log('durée : ' + diff);
+				callback();
+			}
+		}
+		for(var i = 0; i < total; i++){
+			Users.aggregate(
+		        // then group by name and add counts
+		        { $group : {  	_id : '$surname', 
+		        				countSurname : { $sum : 1 }
+		        			}},
+		        // and sort descending
+		        { $sort : { 'countSurname' : -1} },
+		        function(err,items){
+		        	if (err)
+		        		console.log(err);
+		        	verifEnd();
+		        }
+		    );
+		}
+	}
+
+	function queryLookup6(callback){
+
+		var current = 0;
+		var total = NBBADGES;
+		function verifEnd(){
+			current++;
+			if(current >= total){
+				elapsed = new Date()
+				var diff = elapsed.getTime() - from.getTime();
+				console.log('durée : ' + diff);
+				callback();
+			}
+		}
+		for(var i = 0; i < total; i++){
+			Users.aggregate(
+		       	// select only those who have the badge number
+		       	{ $match: { badges: {$elemMatch: {idbadge:i}}}},
+		        // then group by name and add counts
+		        { $group : {  	_id : '$name', 
+		        				countBadgesForName : { $sum : 1 }
+		        			}},
+		        // and sort descending
+		        { $sort : { 'countBadgesForName' : -1} },
+		        function(err,items){
+		        	if (err)
+		        		console.log(err);
+		        	verifEnd();
+		        }
+		    );
 		}
 	}
 
@@ -244,6 +306,16 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	        console.log('start lookup all user that have a badge id, use join');
 	        from = new Date();
 	        queryLookup4(callback);
+	    },
+	    function(callback){
+	        console.log('start lookup with an aggregate that count the number of same surnames');
+	        from = new Date();
+	        queryLookup5(callback);
+	    },
+	    function(callback){
+	        console.log('start lookup with an aggregate that count the number of same names with a given badge');
+	        from = new Date();
+	        queryLookup6(callback);
 	    }
 	],
 	function(err){
