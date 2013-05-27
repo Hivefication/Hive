@@ -32,4 +32,13 @@ suite.use('localhost', 8888)
 				assert.isArray(badges);
 				assert.equal(badges.length, 1);
 			})
+	.undiscuss()
+	.discuss('When adding a badge without the icon')
+		.setHeader('Content-Type', 'application/json')
+		.post('/badges', { name: 'badge2' })
+		.expect(200)
+		.expect('should respond with {"error":"An error has occurred"}', function(err, res, body){
+			var badge = JSON.parse(body);
+			assert.equal(badge, {error: 'An error has occurred'});
+		})
 	.export(module);
