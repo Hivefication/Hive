@@ -86,7 +86,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	function populateDatabase(callback){
 
 		var current = 0;
-		var total = NBBADGES + NBUSERS + NBUSERS * NBBADGESMAX;
+		var total = NBBADGES + NBUSERS;
 		function verifEnd(){
 			current++;
 			if(current >= total){
@@ -111,14 +111,11 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 		    for(var j = 0; j<NBBADGESMAX; j++){
 				var badge_id = Math.floor(Math.random()*NBBADGES);
 				var badge_name = 'badge ' + badge_id;
-				array.push({idbadge:id, })
+				array.push({'idbadge':badge_id, 'name':badge_name})
 			}
 		    
-			Users.insert({idkey:i, name:userNames[i], surname:userSurnames[i], badges:[]}, {w:1}, function(err, result){
+			Users.insert({idkey:i, name:userNames[i], surname:userSurnames[i], badges:array}, {w:1}, function(err, result){
 				verifEnd();
-				if (err){
-					console.log(err);
-				}
 			});
 		}
 	}
@@ -179,11 +176,9 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 			}
 		}
 		for(var i = 0; i < total; i++){
-			var stream = Users.find().stream();
-			stream.on("data", function(item) {});
-			stream.on("end", function(){
+			Users.find().toArray(function(err, docs){
 				verifEnd();
-		    });
+			});
 		}
 	}
 
@@ -201,11 +196,9 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 			}
 		}
 		for(var i = 0; i < total; i++){
-			var stream = Users.find({badges : {$elemMatch: {idbadge:i}}}).stream();
-			stream.on("data", function(item) {});
-			stream.on("end", function(){
+			Users.find({badges : {$elemMatch: {idbadge:i}}}).toArray(function(err, docs){
 				verifEnd();
-		    });
+			});
 		}
 	}
 
