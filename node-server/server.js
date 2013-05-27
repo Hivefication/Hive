@@ -8,7 +8,6 @@ var rewards = require('./controllers/rewards');
 var app = express();
 
 function start() {
-  console.log('here');
 
     app.configure(function () {
         app.use(express.logger('dev'));     /// 'default', 'short', 'tiny', 'dev'
