@@ -1,3 +1,4 @@
+
 // http://there4development.com/blog/2012/07/29/handlebars-helpers-for-debugging-and-pluralization/
 // usage: {{pluralize collection.length 'quiz' 'quizzes'}}
 Handlebars.registerHelper('pluralize', function (number, single, plural) {
