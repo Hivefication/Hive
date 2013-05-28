@@ -29,6 +29,7 @@ badgeSchema.virtual('url').get(function () {
 });
 
 var Badge = mongoose.model('Badge', badgeSchema, collectionName);
+exports.Badge = Badge;
 
 exports.findById = function(id, callback) {
     console.log('Retrieving badge: ' + id);

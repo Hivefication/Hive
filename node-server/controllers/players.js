@@ -153,11 +153,43 @@ exports.addReward = function (req, res) {
 
 exports.addBadge = function (req, res) {
     var playerid = req.params.id;
-    var badge = req.body;
+    var _bdg = req.body;
 
-    // just copy the pattern of exports.addEvent
+    var Badge = require('../models/badge');
 
-    res.send({status:'success'});
+    // check that the event type exists, overwrites evt's scope
+    Badge.findById(_bdg._id,function(err,bdg){
+        if (err){
+            console.warn('The badge does not exist: ' + err);
+            res.send({'error':err});
+            return;
+        }
+
+        // check that the player exists
+        model.findById(playerid,function(err,player){
+            if (err){
+                console.warn('The player does not exist: ' + err);
+                res.send({error:err})
+                return;
+            }
+
+            // and now add the event to the player
+            model.addBadge(player, bdg,function(err, result) {
+                // do post-processing here
+                if (err){
+                    console.warn('Error adding player\'s badge: ' + bdg);
+                    res.send({'error':err});
+                }
+                else {
+                    console.log('Success: ',result);
+                    res.send({status:'success'});
+                }
+            })
+        });
+        
+        
+    });
+
 }
 
 

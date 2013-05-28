@@ -8,6 +8,7 @@ var badgeSchema = require("../models/badge").badgeSchema;
 var rewardSchema = require("../models/reward").rewardSchema;
 var eventSchema = require("../models/event").eventSchema;
 var EventModel = require("../models/event").Event;
+var BadgeModel = require("../models/badge").Badge;
 
 // https://github.com/chriso/node-validator
 // https://npmjs.org/package/mongoose-validator
@@ -131,7 +132,14 @@ exports.addEvent = function(player, eventType, callback) {
 };
 
 exports.addBadge = function(player,badge,callback){
-    // just copy the pattern of exports.addEvent
+    console.log('Adding a badge to ' + player._id + ' : ' + JSON.stringify(badge));
+
+    player.badges = player.badges || [];
+    player.badges.push(badge);
+
+    // Fuckin' experimental frameworks...
+    // https://github.com/LearnBoost/mongoose/issues/571
+    Player.update({_id:player._id}, {$set: {badges: player.badges}}, {upsert:true}, callback);
 };
 
 exports.addReward = function(player, reward, callback){
