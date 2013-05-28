@@ -74,7 +74,9 @@ Template.event.event_name = function () {
 
 
 Template.badge.badge_icon_url = function () {
-  return 'http://localhost:8888/badges/' + this._id.toHexString() + '/icon';
+  // HACK to get the server IP from the client's perspective
+  var server_ip = Meteor.default_connection._stream.socket._base_url.split('/')[2].split(':')[0]
+  return 'http://'+server_ip+':8888/badges/' + this._id.toHexString() + '/icon';
 };
 
 
