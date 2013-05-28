@@ -12,13 +12,11 @@ var surnames = new Array("joel", "greg", "jorge", "nicolas", "patrick", "guillau
 
 var names = new Array("ducommun", "cavat", "alvalejo", "aubert", "rensch", "taillard", "beauvert", "gavillet", "monachon", "constantin", "blocher", "paul II", "von beethoven", "mozart", "rossini", "bach", "tchaikovski", "vivaldi");
 
-var NBUSERS  = 10000;
-var NBBADGES = 1000;
+var NBUSERS  = 10;
+var NBBADGES = 100;
 var NBBADGESMAX = 10;
-var NBREPETITION = 50;
-
+var NBREPETITION = 20;
 var elapsed, from;
-
 
 connection.connect();
 
@@ -126,7 +124,7 @@ function peupleDatabase(callback){
 
 function queryLookup1(callback){
 
-    for(var i = 0; i < NBUSERS; i++){
+    for(var i = 0; i < NBREPETITION; i++){
       connection.query('SELECT U.name as nameUser, U.surname as surname, B.name as namebadge FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser INNER JOIN T_Badge B ON B.idBadge = BU.idBadge WHERE U.idUser = ' + i);
     }
 
@@ -140,7 +138,7 @@ function queryLookup1(callback){
 
 function queryLookup2(callback){
 
-    for(var i = 0; i < NBBADGES; i++){
+    for(var i = 0; i < NBREPETITION; i++){
       connection.query('SELECT * FROM T_Badge B WHERE idBadge = ' + i);
     }
 
@@ -168,7 +166,7 @@ function queryLookup3(callback){
 
 function queryLookup4(callback){
 
-    for(var i = 0; i < NBBADGES; i++){
+    for(var i = 0; i < NBREPETITION; i++){
       connection.query('SELECT * FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser WHERE BU.idBadge = ' + i);
     }
 
@@ -196,7 +194,7 @@ function queryLookup5(callback){
 
 function queryLookup6(callback){
 
-    for(var i = 0; i < NBBADGES; i++){
+    for(var i = 0; i < NBREPETITION; i++){
       connection.query('SELECT U.name, count(*) as countBadges FROM T_User U INNER JOIN T_BadgeUser BU ON U.idUser = BU.idUser WHERE BU.idBadge = ' + i + ' GROUP BY U.name ORDER BY countBadges DESC');
     }
 
