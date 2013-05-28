@@ -8,7 +8,7 @@ var eventSchema = new Schema({
     // no need to specify id... it is automanaged by mongodb
     datetime: {
         type: Date,
-        default: new Date(),
+        default: Date.now,
         required: true
     },
     // @TODO: event type has to be extended, we need information

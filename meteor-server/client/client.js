@@ -1,3 +1,4 @@
+
 // http://there4development.com/blog/2012/07/29/handlebars-helpers-for-debugging-and-pluralization/
 // usage: {{pluralize collection.length 'quiz' 'quizzes'}}
 Handlebars.registerHelper('pluralize', function (number, single, plural) {
@@ -54,6 +55,9 @@ Template.player_details.player_events = function() {
   return Players.findOne({ _id: Session.get("selected_player") }).events;
 };
 
+Template.badge.url = function(){
+  return 'http://localhost:8888/badges/' + this._id.toHexString() + '/icon'; 
+}
 
 Template.event.rendered = function () {
   jQuery(this.find('.event-date')).tooltip();
