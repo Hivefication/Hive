@@ -46,18 +46,9 @@ footer {
     font-weight: bold;
 }
 
-.inc {
+.inc, .set {
     float: right;
-    margin-top: 10px;
+    clear: right;
+    margin: 10px;
     cursor: pointer;
-}
-
-.badge{
-  margin: 10px 5px;
-}
-
-.badge img{
-    max-width: 48px;
-    max-height: 48px; 
-    margin: 5px 10px 5px 0;
 }

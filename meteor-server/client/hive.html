@@ -67,11 +67,16 @@
 
   {{#if selected_name}}
     <div class="hero-unit player-details">
-      <h1>
-        {{selected_name}}
+      <div>
         <a class="btn btn-primary btn-large inc">
           Give 5 points !
         </a>
+        <a class="btn btn-success btn-large set">
+          Set to {{random}} points !
+        </a>
+      </div>
+      <h1>
+        {{selected_name}}
       </h1>
       <p class="label label-info"><i class="icon-star icon-white"></i> {{player_score}} {{pluralize player_score 'point' 'points'}}</p>
       <p class="label label-info"><i class="icon-certificate icon-white"></i> {{player_badges.length}} {{pluralize player_badges.length 'badge' 'badges'}}</p>
@@ -101,7 +106,7 @@
 
 <template name="badge">
   <div class="badge">
-    <img src="{{url}}"></img>
+    <img src="{{badge_icon_url}}"></img>
     <span>{{name}}</span>
   </div>
 </template>

@@ -35,12 +35,20 @@ Template.player.selected = function () {
 Template.player_details.events({
   'click .inc': function () {
     Players.update(Session.get("selected_player"), { $inc: { score: 5 } });
+  },
+  'click .set': function () {
+    Players.update(Session.get("selected_player"), { $set: { score: Session.get("random") } });
+    Session.set("random", Math.round(100 * Math.random()));
   }
 });
 
 Template.player_details.selected_name = function () {
   var player = Players.findOne(Session.get("selected_player"));
   return player && player.name;
+};
+
+Template.player_details.random = function () {
+  return Session.get("random");
 };
 
 Template.player_details.player_badges = function () {
@@ -55,9 +63,6 @@ Template.player_details.player_events = function() {
   return Players.findOne({ _id: Session.get("selected_player") }).events;
 };
 
-Template.badge.url = function(){
-  return 'http://localhost:8888/badges/' + this._id.toHexString() + '/icon'; 
-}
 
 Template.event.rendered = function () {
   jQuery(this.find('.event-date')).tooltip();
@@ -66,3 +71,13 @@ Template.event.rendered = function () {
 Template.event.event_name = function () {
   return EventTypes.findOne({ _id: this.eventTypeId }).name;
 };
+
+
+Template.badge.badge_icon_url = function () {
+  return 'http://192.168.219.130:8888/badges/' + this._id + '/icon';
+};
+
+
+Meteor.startup(function () {
+  Session.set("random", Math.round(100 * Math.random()));
+});
