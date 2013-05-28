@@ -5,10 +5,10 @@ var surnames = new Array("joel", "greg", "jorge", "nicolas", "patrick", "guillau
 
 var names = new Array("ducommun", "cavat", "albaladejo", "aubert", "rensch", "taillard", "beauvert", "gavillet", "monachon", "constantin", "blocher", "paul II", "von beethoven", "mozart", "rossini", "bach", "tchaikovski", "vivaldi");
 
-var NBUSERS  = 10000;
-var NBBADGES = 1000;
+var NBUSERS  = 10;
+var NBBADGES = 100;
 var NBBADGESMAX = 10;
-var NBREPETITION = 50;
+var NBREPETITION = 20;
 
 var elapsed, from;
 
@@ -123,7 +123,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	function queryLookup1(callback){
 		
 		var current = 0;
-		var total = NBUSERS;
+		var total = NBREPETITION;
 		function verifEnd(){
 			current++;
 			if(current >= total){
@@ -144,7 +144,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	function queryLookup2(callback){
 		
 		var current = 0;
-		var total = NBBADGES;
+		var total = NBREPETITION;
 		function verifEnd(){
 			current++;
 			if(current >= total){
@@ -185,7 +185,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	function queryLookup4(callback){
 
 		var current = 0;
-		var total = NBBADGES;
+		var total = NBREPETITION;
 		function verifEnd(){
 			current++;
 			if(current >= total){
@@ -235,7 +235,7 @@ Mongo.connect("mongodb://localhost:27017/benchmarkDB", function(err, db) {
 	function queryLookup6(callback){
 
 		var current = 0;
-		var total = NBBADGES;
+		var total = NBREPETITION;
 		function verifEnd(){
 			current++;
 			if(current >= total){

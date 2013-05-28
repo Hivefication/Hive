@@ -1,0 +1,241 @@
+MYSQL
+
+var NBUSERS  = 10000;
+var NBBADGES = 100;
+var NBBADGESMAX = 10;
+var NBREPETITION = 20;
+
+start create database
+durée : 212
+start populate database
+durée : 910936
+start lookup all users one by one with their badges
+durée : 87
+start lookup all badges without join
+durée : 15
+start lookup all entries with join
+durée : 79152
+start lookup all user that have a badge id, use join
+durée : 1278
+start lookup with an aggregate that count the number of same surnames
+durée : 453
+start lookup with an aggregate that count the number of same names with a given
+badge
+durée : 295
+Finish
+
+var NBUSERS  = 1000;
+var NBBADGES = 100;
+var NBBADGESMAX = 10;
+var NBREPETITION = 20;
+
+start create database
+durée : 281
+start populate database
+durée : 34962
+start lookup all users one by one with their badges
+durée : 28
+start lookup all badges without join
+durée : 14
+start lookup all entries with join
+durée : 8008
+start lookup all user that have a badge id, use join
+durée : 160
+start lookup with an aggregate that count the number of same surnames
+durée : 59
+start lookup with an aggregate that count the number of same names with a given
+badge
+durée : 65
+Finish
+
+var NBUSERS  = 100;
+var NBBADGES = 100;
+var NBBADGESMAX = 10;
+var NBREPETITION = 20;
+
+start create database
+durée : 91
+start populate database
+durée : 2659
+start lookup all users one by one with their badges
+durée : 35
+start lookup all badges without join
+durée : 18
+start lookup all entries with join
+durée : 974
+start lookup all user that have a badge id, use join
+durée : 39
+start lookup with an aggregate that count the number of same surnames
+durée : 35
+start lookup with an aggregate that count the number of same names with a given
+badge
+durée : 40
+Finish
+
+var NBUSERS  = 10;
+var NBBADGES = 100;
+var NBBADGESMAX = 10;
+var NBREPETITION = 20;
+
+start create database
+durée : 77
+start populate database
+durée : 485
+start lookup all users one by one with their badges
+durée : 28
+start lookup all badges without join
+durée : 16
+start lookup all entries with join
+durée : 156
+start lookup all user that have a badge id, use join
+durée : 23
+start lookup with an aggregate that count the number of same surnames
+durée : 22
+start lookup with an aggregate that count the number of same names with a given
+badge
+durée : 26
+Finish
+
+MONGODB
+
+var NBUSERS  = 10000;
+var NBBADGES = 100;
+var NBBADGESMAX = 10;
+var NBREPETITION = 20;
+
+start create database
+durée : 16
+start delete existing data
+durée : 127
+start populate database
+durée : 9663
+start lookup all users one by one with their badges
+durée : 50
+start lookup all badges without join
+durée : 6
+start lookup all entries with join
+durée : 39646
+start lookup all user that have a badge id, use join
+durée : 4460
+start lookup with an aggregate that count the number of same surnames
+durée : 422
+start lookup with an aggregate that count the number of same names with a given
+badge
+durée : 1188
+Finish
+
+var NBUSERS  = 1000;
+var NBBADGES = 100;
+var NBBADGESMAX = 10;
+var NBREPETITION = 20;
+
+start create database
+durée : 12
+start delete existing data
+durée : 464
+start populate database
+durée : 1075
+start lookup all users one by one with their badges
+durée : 16
+start lookup all badges without join
+durée : 8
+start lookup all entries with join
+durée : 3773
+start lookup all user that have a badge id, use join
+durée : 497
+start lookup with an aggregate that count the number of same surnames
+durée : 55
+start lookup with an aggregate that count the number of same names with a given
+badge
+durée : 192
+Finish
+
+var NBUSERS  = 100;
+var NBBADGES = 100;
+var NBBADGESMAX = 10;
+var NBREPETITION = 20;
+
+start create database
+durée : 12
+start delete existing data
+durée : 49
+start populate database
+durée : 291
+start lookup all users one by one with their badges
+durée : 18
+start lookup all badges without join
+durée : 8
+start lookup all entries with join
+durée : 345
+start lookup all user that have a badge id, use join
+durée : 61
+start lookup with an aggregate that count the number of same surnames
+durée : 25
+start lookup with an aggregate that count the number of same names with a given
+badge
+durée : 99
+Finish
+
+var NBUSERS  = 10;
+var NBBADGES = 100;
+var NBBADGESMAX = 10;
+var NBREPETITION = 20;
+
+start create database
+durée : 18
+start delete existing data
+durée : 13
+start populate database
+durée : 119
+start lookup all users one by one with their badges
+durée : 20
+start lookup all badges without join
+durée : 82
+start lookup all entries with join
+durée : 44
+start lookup all user that have a badge id, use join
+durée : 16
+start lookup with an aggregate that count the number of same surnames
+durée : 16
+start lookup with an aggregate that count the number of same names with a given
+badge
+durée : 92
+Finish
+
+
+
+
+Insertion
+;10000;1000;100;10
+MySQL;910936;34962;2659;485
+MongoDB;9663;1075;291;119
+
+lookup all users one by one with their badges
+;10000;1000;100;10
+MySQL;87;28;35;28
+MongoDB;50;16;18;20
+
+lookup all badges without join
+;10000;1000;100;10
+MySQL;15;14;18;16
+MongoDB;6;8;8;82
+
+lookup all entries with join
+;10000;1000;100;10
+MySQL;79152;8008;974;156
+MongoDB;39646;3773;345;44
+
+lookup all user that have a badge id, use join
+;10000;1000;100;10
+MySQL;1278;160;39;23
+MongoDB;4460;497;61;16
+
+lookup with an aggregate that count the number of same surnames
+;10000;1000;100;10
+MySQL;453;59;35;22
+MongoDB;422;55;25;16
+
+lookup with an aggregate that count the number of same names with a given
+;10000;1000;100;10
+MySQL;295;65;40;26
+MongoDB;1188;192;99;92
