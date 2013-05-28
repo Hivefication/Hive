@@ -74,7 +74,7 @@ Template.event.event_name = function () {
 
 
 Template.badge.badge_icon_url = function () {
-  return 'http://192.168.219.130:8888/badges/' + this._id + '/icon';
+  return 'http://localhost:8888/badges/' + this._id.toHexString() + '/icon';
 };
 
 

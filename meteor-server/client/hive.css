@@ -52,3 +52,13 @@ footer {
     margin: 10px;
     cursor: pointer;
 }
+
+.badge{
+    margin: 10px 5px 10px 0;
+}
+
+.badge img{
+    max-width: 48px;
+    max-height: 48px; 
+    margin: 5px 10px 5px 0;
+}
